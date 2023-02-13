@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; //ใช้แปะtimestamp
 import 'package:string_validator/string_validator.dart'; //เป็นเครื่องเช็ค
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart'; //ใช้ลิ้งเว็บ
 import 'package:flutter_application_1/Pages/allvariable.dart';
 
@@ -211,12 +212,13 @@ class _MapsPageState extends State<MapsPage> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                  final url =
+                                  const url =
                                       'https://nuclear-app-cf4ef.web.app/';
-                                  if (await canLaunchUrlString(url)) {
-                                    await launchUrlString(url);
+                                  final uri = Uri.encodeFull(url);
+                                  if (await canLaunchUrlString(uri)) {
+                                    await launchUrlString(uri);
                                   } else {
-                                    throw 'Could not launch $url';
+                                    throw 'Could not launch $uri';
                                   }
                                 },
                                 child: Text('กดดูcontour map'),

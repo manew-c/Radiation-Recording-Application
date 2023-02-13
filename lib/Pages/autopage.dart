@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class Autopage extends StatefulWidget {
@@ -207,11 +208,12 @@ class _AutopageState extends State<Autopage> {
                               )),
                     ElevatedButton(
                       onPressed: () async {
-                        final url = 'https://nuclear-app-cf4ef.web.app/';
-                        if (await canLaunchUrlString(url)) {
-                          await launchUrlString(url);
+                        const url = 'https://nuclear-app-cf4ef.web.app/';
+                        final uri = Uri.encodeFull(url);
+                        if (await canLaunchUrlString(uri)) {
+                          await launchUrlString(uri);
                         } else {
-                          throw 'Could not launch $url';
+                          throw 'Could not launch $uri';
                         }
                       },
                       child: const Text('กดดูcontour map'),
