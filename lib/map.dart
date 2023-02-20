@@ -17,6 +17,8 @@ class _MapsPageState extends State<MapsPage> {
   final _formKey = GlobalKey<FormState>();
   late Position userlocation;
   late GoogleMapController mapController;
+  String? _selectedunit5cm;
+  String? _selectedunit1m;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -55,8 +57,9 @@ class _MapsPageState extends State<MapsPage> {
         title: Flexible(
           child: Column(
             children: <Widget>[
-              Text('งาน ${Point.worksite} จังหวัด ${Point.province}'),
-              Text('ผู้ใช้ ${user.username} หัววัด ${user.detector}'),
+              Text('ไซต์งาน ${start.selectedworksite} '),
+              Text(
+                  'ผู้ใช้ ${start.selectedusername} หัววัด ${start.selecteddetector}'),
             ],
           ),
         ),
@@ -79,8 +82,8 @@ class _MapsPageState extends State<MapsPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CircularProgressIndicator(),
-                  Text('กำลังโหลด'),
+                  const CircularProgressIndicator(),
+                  const Text('กำลังโหลด'),
                 ],
               ),
             );
@@ -104,155 +107,202 @@ class _MapsPageState extends State<MapsPage> {
                       title: Text(
                           'Your location!\nlat: ${userlocation.latitude} long: ${userlocation.longitude} '),
                       content: Form(
-                          key: _formKey,
-                          child: Column(
-                            children: <Widget>[
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: 'กรอกชื่อจุด',
-                                  labelText: 'ชื่อจุด',
-                                  border: OutlineInputBorder(),
-                                ),
-                                validator: (value) {
-                                  if (value! == '') {
-                                    return 'Please enter ชื่อจุด';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) => MAP.pointname = (value!),
+                        key: _formKey,
+                        child: Column(
+                          children: <Widget>[
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: 'กรอกชื่อจุด',
+                                labelText: 'ชื่อจุด',
+                                border: OutlineInputBorder(),
                               ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: 'กรอกค่าDoseที่ 5 cm',
-                                  labelText: 'Dose ที่ 5 cm',
-                                  border: OutlineInputBorder(),
+                              validator: (value) {
+                                if (value! == '') {
+                                  return 'Please enter ชื่อจุด';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) => MAP.pointname = (value!),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: (TextFormField(
+                                    decoration: const InputDecoration(
+                                      hintText:
+                                          'กรอกค่าDoseที่ 5 cm กรอกหรือไม่กรอกก็ได้',
+                                      labelText: 'Dose ที่ 5 cm',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    validator: (value) {
+                                      //อันนี้มันoptional
+                                      if (isFloat(value!) == false) {
+                                        return 'ค่าที่กรอกไม่ใช่ตัวเลข';
+                                      }
+                                      return null; //อย่าลืมแก้
+                                    },
+                                    onSaved: (value) {
+                                      if (value!.isNotEmpty == true) {
+                                        MAP.dose5cm = double.parse(value);
+                                      }
+                                    },
+                                  )),
                                 ),
-                                validator: (value) {
-                                  if (value == '' ||
-                                      isNumeric(value!) == false) {
-                                    return 'Please enter Doseที่ 5 cm';
-                                  } else {}
-                                  return null;
-                                },
-                                onSaved: (value) =>
-                                    MAP.dose5cm = double.parse(value!),
-                              ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: 'กรอกค่าDoseที่ 1 m',
-                                  labelText: 'dose ที่1m',
-                                  border: OutlineInputBorder(),
-                                ),
-                                validator: (value) {
-                                  if (value == '' ||
-                                      isNumeric(value!) == false) {
-                                    return 'Please enter Doseที่ 1 m';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) =>
-                                    MAP.dose1m = double.parse(value!),
-                              ),
-                              SizedBox(height: 10),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: 'กรอกหมายเหตุ',
-                                  labelText: 'หมายเหตุ',
-                                  border: OutlineInputBorder(),
-                                ),
-                                validator: (value) {
-                                  if (value! == '') {
-                                    return 'Please enter หมายเหตุ';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) => MAP.note = value!,
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    _formKey.currentState!.save();
-                                    CollectionReference siteandprovind =
-                                        FirebaseFirestore.instance
-                                            .collection('ไซต์งาน');
-                                    siteandprovind
-                                        .doc(Point.worksite)
-                                        .collection('ผู้วัดรังสี')
-                                        .doc(user.username)
-                                        .collection('หัววัด')
-                                        .doc(user.detector)
-                                        .collection('ชื่อจุด')
-                                        .doc(MAP.pointname)
-                                        .set({
-                                      'dose1m': MAP.dose1m,
-                                      'dose5cm': MAP.dose5cm,
-                                      'lat': userlocation.latitude,
-                                      'long': userlocation.longitude,
-                                      'note': MAP.note,
-                                      'time': Timestamp.now(),
+                                //ใส่dropอันที่1
+                                DropdownButton<String>(
+                                  items: const [
+                                    DropdownMenuItem<String>(
+                                      value: 'µSv/h',
+                                      child: Text('µSv/h'),
+                                    ),
+                                    DropdownMenuItem<String>(
+                                      value: 'nSv/h',
+                                      child: Text('nSv/h'),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      MAP.unit = value!;
+                                      _selectedunit5cm = value;
                                     });
-                                    _formKey.currentState!.reset();
-
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content: Text(
-                                          'บันทึกจุด${MAP.pointname}เรียบร้อย   โดสที่5cm ${MAP.dose5cm}  โดสที่1m ${MAP.dose1m}'),
-                                      duration: Duration(seconds: 10),
-                                    ));
-                                  }
-
-                                  /*Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => survey()),
-                            );*/
-                                },
-                                child: Center(child: Text("Submit")),
+                                  },
+                                  hint: const Text('เลือกหน่วย'),
+                                  value: _selectedunit5cm,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: (TextFormField(
+                                    decoration: const InputDecoration(
+                                      hintText: 'กรอกค่าDoseที่ 1 m',
+                                      labelText: 'Dose ที่1m',
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    validator: (value) {
+                                      if (value == '') {
+                                        return 'โปรดใส่ค่า Doseที่ 1 m';
+                                      } else if (isFloat(value!) == false) {
+                                        return 'ค่าที่กรอกไม่ใช่ตัวเลข';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value) =>
+                                        MAP.dose1m = double.parse(value!),
+                                  )),
+                                ),
+                                //อันที่2
+                                DropdownButton<String>(
+                                  items: const [
+                                    DropdownMenuItem<String>(
+                                      value: 'µSv/h',
+                                      child: Text('µSv/h'),
+                                    ),
+                                    DropdownMenuItem<String>(
+                                      value: 'nSv/h',
+                                      child: Text('nSv/h'),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      MAP.unit = value!;
+                                      _selectedunit1m = value;
+                                    });
+                                  },
+                                  hint: const Text('เลือกหน่วย'),
+                                  value: _selectedunit1m,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: 'กรอกหมายเหตุ',
+                                labelText: 'หมายเหตุ',
+                                border: OutlineInputBorder(),
                               ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  const url =
-                                      'https://nuclear-app-cf4ef.web.app/';
-                                  final uri = Uri.encodeFull(url);
-                                  if (await canLaunchUrlString(uri)) {
-                                    await launchUrlString(uri);
-                                  } else {
-                                    throw 'Could not launch $uri';
-                                  }
-                                },
-                                child: Text('กดดูcontour map'),
-                              ),
-                            ],
-                          )),
+                              validator: (value) {
+                                if (value! == '') {
+                                  return 'หากไม่มีกรุณากรอก - ';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) => MAP.note = value!,
+                            ),
+                            const SizedBox(height: 20),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  CollectionReference siteandprovind =
+                                      FirebaseFirestore.instance
+                                          .collection('ไซต์งาน');
+                                  siteandprovind
+                                      .doc(start.selectedworksite)
+                                      .collection('ผู้วัดรังสี')
+                                      .doc(start.selectedusername)
+                                      .collection('หัววัด')
+                                      .doc(start.selecteddetector)
+                                      .collection('ชื่อจุด')
+                                      .doc(MAP.pointname)
+                                      .set({
+                                    'dose1m': MAP.dose1m,
+                                    'doseunit1m': _selectedunit1m,
+                                    'dose5cm': MAP.dose5cm,
+                                    'doseunit5cm': _selectedunit5cm,
+                                    'Unit': MAP.unit,
+                                    'lat': userlocation.latitude,
+                                    'long': userlocation.longitude,
+                                    'note': MAP.note,
+                                    'time': Timestamp.now(),
+                                  });
+                                  _formKey.currentState!.reset();
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                        'บันทึกจุด${MAP.pointname}เรียบร้อย   โดสที่5cm ${MAP.dose5cm}  โดสที่1m ${MAP.dose1m}'),
+                                    duration: const Duration(seconds: 10),
+                                  ));
+                                }
+
+                                /*Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => survey()),
+                                );*/
+                              },
+                              child: const Center(child: Text("Submit")),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                const url =
+                                    'https://nuclear-app-cf4ef.web.app/';
+                                final uri = Uri.encodeFull(url);
+                                if (await canLaunchUrlString(uri)) {
+                                  await launchUrlString(uri);
+                                } else {
+                                  throw 'Could not launch $uri';
+                                }
+                              },
+                              child: const Text('กดดูcontour map'),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },
               );
             },
-            label: Text("Send Location"),
-            icon: Icon(Icons.near_me),
+            label: const Text("บันทึกค่าdose"),
+            icon: const Icon(Icons.near_me),
           ),
         ],
       ),
     );
   }
 }
-
-/*
-ตัวแปร
-${userlocation.latitude} long: ${userlocation.longitude
-*/
-/*class _gpsclass {
-  String pointname;
-  double dose5cm;
-  double dose1m;
-  String note;
-  _gpsclass(
-      {required this.pointname,
-      required this.dose5cm,
-      required this.dose1m,
-      required this.note});
-}
-
-_gpsclass MAP = _gpsclass(pointname: '', dose5cm: -1, dose1m: -1, note: '');*/

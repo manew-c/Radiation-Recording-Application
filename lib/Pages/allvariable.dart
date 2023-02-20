@@ -30,11 +30,27 @@ class _gpsclass {
   double dose5cm;
   double dose1m;
   String note;
+  String unit;
   _gpsclass(
       {required this.pointname,
       required this.dose5cm,
       required this.dose1m,
-      required this.note});
+      required this.note,
+      required this.unit});
 }
 
-_gpsclass MAP = _gpsclass(pointname: '', dose5cm: -1, dose1m: -1, note: '');
+_gpsclass MAP =
+    _gpsclass(pointname: '', dose5cm: 0, dose1m: 0, note: '', unit: '');
+
+class _startclass {
+  String selectedworksite;
+  String selectedusername;
+  String selecteddetector;
+  _startclass(
+      {required this.selectedusername,
+      required this.selecteddetector,
+      required this.selectedworksite});
+}
+
+_startclass start = _startclass(
+    selectedusername: '', selecteddetector: '', selectedworksite: '');

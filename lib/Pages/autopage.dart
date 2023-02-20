@@ -4,15 +4,20 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class Autopage extends StatefulWidget {
+  const Autopage({super.key});
+
   @override
   _AutopageState createState() => _AutopageState();
 }
 
 class _AutopageState extends State<Autopage> {
+  String? out;
+  final _formKey = GlobalKey<FormState>();
   final CollectionReference _worksitecollection =
       FirebaseFirestore.instance.collection('allworksite');
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _textworksiteController = TextEditingController();
+  TextEditingController _textprovinceController = TextEditingController();
   List<String> _listautoworksite = <String>[];
   List<String> _filteredworksite = [];
   List<String> _filteredprovince = [];
@@ -95,6 +100,8 @@ class _AutopageState extends State<Autopage> {
     'จังหวัดอุทัยธานี',
     'จังหวัดอุบลราชธานี'
   ];
+  String? saveworksite;
+  String? saveprovince;
 
   @override
   void initState() {
@@ -123,14 +130,14 @@ class _AutopageState extends State<Autopage> {
   }
 
   void _selectworksite(String _suggestion) {
-    _textEditingController.text = _suggestion;
+    _textworksiteController.text = _suggestion;
     setState(() {
       _filteredworksite = [];
     });
   }
 
   void _selectprovince(String _suggestion) {
-    _textEditingController.text = _suggestion;
+    _textprovinceController.text = _suggestion;
     setState(() {
       _filteredprovince = [];
     });
@@ -150,14 +157,23 @@ class _AutopageState extends State<Autopage> {
                 key: formKey,
                 child: Column(
                   children: <Widget>[
+                    /*
                     TextFormField(
-                      controller: _textEditingController,
+                      controller: _textworksiteController,
                       decoration: InputDecoration(
                         hintText: "กรุณากรอกไซต์งาน",
                         border: OutlineInputBorder(),
                         labelText: 'ไซต์งาน',
                       ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'หากไม่มีโปรดใส่เครื่องหมาย - ';
+                        }
+                        return null;
+                      },
                       onChanged: (value) => _worksitefunction(value),
+                      onSaved: (_textworksiteController) =>
+                          saveworksite = _textworksiteController,
                     ),
                     SizedBox(
                         height: 100.0,
@@ -177,35 +193,51 @@ class _AutopageState extends State<Autopage> {
                                         )),
                                   );
                                 },
-                              )),
-                    TextFormField(
-                      controller: _textEditingController,
-                      decoration: InputDecoration(
-                        hintText: "กรุณากรอกจังหวัด",
-                        border: OutlineInputBorder(),
-                        labelText: 'จังหวัด',
-                      ),
-                      onChanged: (value) => _provincefunction(value),
+                              )),*/
+                    Text(
+                      'เลือกจังหวัด',
+                      textAlign: TextAlign.left,
                     ),
-                    SizedBox(
-                        height: 200.0,
-                        child: _filteredprovince.isEmpty
-                            ? Container()
-                            : ListView.builder(
-                                itemCount: _filteredprovince.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return GestureDetector(
-                                    onTap: () => _selectprovince(
-                                        _filteredprovince[index]),
-                                    child: Container(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          _filteredprovince[index],
-                                          style: TextStyle(fontSize: 18.0),
-                                        )),
-                                  );
-                                },
-                              )),
+                    Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text == '') {
+                          return const Iterable<String>.empty();
+                        }
+                        return _listautoprovince.where((String option) {
+                          return option
+                              .contains(textEditingValue.text.toLowerCase());
+                        });
+                      },
+                      onSelected: (String selection) {
+                        debugPrint('You just selected $selection');
+                        out = selection;
+                      },
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (out != '') {
+                          /*if (_formKey.currentState!.validate()) {
+                          _formKey.currentState?.save();
+                          debugPrint(saveworksite);
+                          debugPrint(saveprovince);*/
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('บันทึกไซต์งาน  $out เรียบร้อย'),
+                            duration: Duration(seconds: 4),
+                          ));
+
+                          /*FirebaseFirestore.instance
+                              .collection("allworksite")
+                              .doc(saveworksite)
+                              .set({
+                            'จังหวัด': saveprovince,
+                          });*/
+                          //_formKey.currentState!.reset();
+                        }
+                      }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา
+                      child: Text('บันทึก'),
+                    ),
+                    SizedBox(height: 30), //ช่องว่างเฉยๆ
                     ElevatedButton(
                       onPressed: () async {
                         const url = 'https://nuclear-app-cf4ef.web.app/';

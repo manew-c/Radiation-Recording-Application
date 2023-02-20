@@ -14,20 +14,25 @@ class newuserpage extends StatefulWidget {
 class _newuserpageState extends State<newuserpage> {
   String? _selectedusername;
   String? _selecteddetector;
-  String? _selecteddetecinfo;
+  String? _selectedworksite;
+
   late var _dropdownusername = <String>{};
   late var _dropdowndetector = <String>{};
-  late var _dropdowndetectinfo = <String>{};
+  late var _dropdownworksite = <String>{};
   final _textControllerusername = TextEditingController();
   final _textControllerdetector = TextEditingController();
   final _textControllerdetectinfo = TextEditingController();
+  CollectionReference worksitedatabase =
+      FirebaseFirestore.instance.collection('allworksite');
+  CollectionReference detectordatabase =
+      FirebaseFirestore.instance.collection('หัววัดall');
 
   @override
   void initState() {
     super.initState();
     fetchDatausername();
     fetchDatadetector();
-    fetchDatadetectinfo();
+    fetchDataworksite();
   }
 
   Future<void> fetchDatausername() async {
@@ -56,197 +61,277 @@ class _newuserpageState extends State<newuserpage> {
     });
   }
 
-  Future<void> fetchDatadetectinfo() async {
+  Future<void> fetchDataworksite() async {
     await FirebaseFirestore.instance
-        .collection("รายละเอียดหัววัดall")
+        .collection("allworksite")
         .get()
         .then((querySnapshot) {
       for (var result in querySnapshot.docs) {
-        _dropdowndetectinfo.add(result.id);
+        _dropdownworksite.add(result.id);
       }
     });
   }
 
-/*final datat = doc.data() as Map<String, dynamic>;
-      List<dynamic> myList = datat['myList'];
-      myList.forEach((item) {
-        _dropdowndetector.add(item);
-      });*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('USER Page'),
+          title: Text('เลือกไซต์งาน ผู้วัด และหัววัด'),
         ),
         body: Container(
           padding: const EdgeInsets.all(30.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'กรอกชื่อผู้วัด',
-                  border: OutlineInputBorder(),
-                ),
-                controller: _textControllerusername,
-                onChanged: (value) async {
-                  Set<String> filteredOptions = _dropdownusername
-                      .where((option) => option.startsWith(value))
-                      .toSet();
-                  setState(() {
-                    _dropdownusername = filteredOptions;
-                    //_selectedusername = value;//นี่คือส่วนที่เพิ่มมมาเองไม่งั้นมันnullแต่ก็errorพอลบทิ้งก็nullแต่ดันไปหน้าต่อไปได้wtf
-                  });
-                },
-                /*onSubmitted: (value) {
-                  debugPrint(value);
-                },*/
-              ),
-              FutureBuilder(
-                future: fetchDatausername(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return DropdownButton(
-                      value: _selectedusername,
-                      items: _dropdownusername
-                          .map((option) => DropdownMenuItem(
-                                value: option,
-                                child: Text(option),
-                              ))
-                          .toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedusername = newValue!;
-                          _textControllerusername.text = newValue;
-                        });
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: (TextField(
+                        decoration: InputDecoration(
+                          labelText: 'กรอกไซต์งาน',
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: _textControllerdetectinfo,
+                        onChanged: (value) async {
+                          Set<String> filteredOptions = _dropdownworksite
+                              .where((option) => option.startsWith(value))
+                              .toSet();
+                          setState(() {
+                            _dropdownworksite = filteredOptions;
+                          });
+                        },
+                      )),
+                    ),
+                    FutureBuilder(
+                      future: fetchDataworksite(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return DropdownButton(
+                            value: _selectedworksite,
+                            items: _dropdownworksite
+                                .map((option) => DropdownMenuItem(
+                                      value: option,
+                                      child: Text(option),
+                                    ))
+                                .toList(),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedworksite = newValue!;
+                                _textControllerdetectinfo.text = newValue;
+                              });
+                            },
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
                       },
-                    );
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'กรอกหัววัด',
-                  border: OutlineInputBorder(),
+                    ),
+                  ],
                 ),
-                controller: _textControllerdetector,
-                onChanged: (value) async {
-                  Set<String> filteredOptions = _dropdowndetector
-                      .where((option) => option.startsWith(value))
-                      .toSet();
-                  setState(() {
-                    _dropdowndetector = filteredOptions;
-                    //_selecteddetector = value;
-                  });
-                },
-              ),
-              FutureBuilder(
-                future: fetchDatadetector(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return DropdownButton(
-                      value: _selecteddetector,
-                      items: _dropdowndetector
-                          .map((option) => DropdownMenuItem(
-                                value: option,
-                                child: Text(option),
-                              ))
-                          .toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selecteddetector = newValue!;
-                          _textControllerdetector.text = newValue;
-                        });
-                      },
-                    );
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'กรอกรายละเอียดหัววัด',
-                  border: OutlineInputBorder(),
+                SizedBox(height: 20),
+                StreamBuilder(
+                  stream: worksitedatabase.doc(_selectedworksite).snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Error: ${snapshot.error}");
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Text("Loading...");
+                    } else if (!snapshot.hasData) {
+                      return Text("Document does not exist");
+                    } else if (snapshot.hasData &&
+                        snapshot.data!.data() != null) {
+                      Map<String, dynamic> data =
+                          snapshot.data!.data() as Map<String, dynamic>;
+                      return ListView(
+                        shrinkWrap: true,
+                        children: [
+                          ListTile(
+                            title: Text('จังหวัด' + ' ' + data['จังหวัด']),
+                            subtitle: Text('หมายเหตุ' + ' ' + data['note']),
+                          )
+                        ],
+                      );
+                    } else {
+                      return Text("กรุณาเลือกไซต์งาน ");
+                    }
+                  },
                 ),
-                controller: _textControllerdetectinfo,
-                onChanged: (value) async {
-                  Set<String> filteredOptions = _dropdowndetectinfo
-                      .where((option) => option.startsWith(value))
-                      .toSet();
-                  setState(() {
-                    _dropdowndetectinfo = filteredOptions;
-                    //_selecteddetecinfo = value;
-                  });
-                },
-              ),
-              FutureBuilder(
-                future: fetchDatadetectinfo(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return DropdownButton(
-                      value: _selecteddetecinfo,
-                      items: _dropdowndetectinfo
-                          .map((option) => DropdownMenuItem(
-                                value: option,
-                                child: Text(option),
-                              ))
-                          .toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selecteddetecinfo = newValue!;
-                          _textControllerdetectinfo.text = newValue;
-                        });
+                SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: (TextField(
+                        decoration: InputDecoration(
+                          labelText: 'กรอกชื่อผู้วัด',
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: _textControllerusername,
+                        onChanged: (value) async {
+                          Set<String> filteredOptions = _dropdownusername
+                              .where((option) => option.startsWith(value))
+                              .toSet();
+                          setState(() {
+                            _dropdownusername = filteredOptions;
+                            //_selectedusername = value;//นี่คือส่วนที่เพิ่มมมาเองไม่งั้นมันnullแต่ก็errorพอลบทิ้งก็nullแต่ดันไปหน้าต่อไปได้wtf
+                          });
+                        },
+                      )),
+                    ),
+                    SizedBox(width: 10),
+                    FutureBuilder(
+                      future: fetchDatausername(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return DropdownButton(
+                            value: _selectedusername,
+                            items: _dropdownusername
+                                .map((option) => DropdownMenuItem(
+                                      value: option,
+                                      child: Text(option),
+                                    ))
+                                .toList(),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedusername = newValue!;
+                                _textControllerusername.text = newValue;
+                              });
+                            },
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
                       },
-                    );
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              ),
-              ElevatedButton(
-                child: Text('Submit'),
-                onPressed: () {
-                  if (_selectedusername?.isNotEmpty == true &&
-                      _selecteddetector?.isNotEmpty == true &&
-                      _selecteddetecinfo?.isNotEmpty == true) {
-                    FirebaseFirestore.instance
-                        .collection("ไซต์งาน")
-                        .doc(Point.worksite)
-                        .collection('ผู้วัดรังสี')
-                        .doc(_selectedusername)
-                        .collection('หัววัด')
-                        .doc(_selecteddetector)
-                        .set({'รายละเอียดหัววัด': _selecteddetecinfo});
-                    FirebaseFirestore.instance
-                        .collection("ชื่อคนall")
-                        .doc(_selectedusername);
-                    FirebaseFirestore.instance
-                        .collection("หัววัดall")
-                        .doc(_selecteddetector);
-                    FirebaseFirestore.instance
-                        .collection("รายละเอียดหัววัดall")
-                        .doc(_selecteddetector);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MapsPage(),
-                      ),
-                    ); //navigator
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: (TextField(
+                        decoration: InputDecoration(
+                          labelText: 'กรอกหัววัด',
+                          border: OutlineInputBorder(),
+                        ),
+                        controller: _textControllerdetector,
+                        onChanged: (value) async {
+                          Set<String> filteredOptions = _dropdowndetector
+                              .where((option) => option.startsWith(value))
+                              .toSet();
+                          setState(() {
+                            _dropdowndetector = filteredOptions;
+                          });
+                        },
+                      )),
+                    ),
+                    SizedBox(width: 10),
+                    FutureBuilder(
+                      future: fetchDatadetector(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return DropdownButton(
+                            value: _selecteddetector,
+                            items: _dropdowndetector
+                                .map((option) => DropdownMenuItem(
+                                      value: option,
+                                      child: Text(option),
+                                    ))
+                                .toList(),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selecteddetector = newValue!;
+                                _textControllerdetector.text = newValue;
+                              });
+                            },
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                StreamBuilder(
+                  stream: detectordatabase.doc(_selecteddetector).snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text("Error: ${snapshot.error}");
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Text("Loading...");
+                    } else if (!snapshot.hasData) {
+                      return Text("Document does not exist");
+                    } else if (snapshot.hasData &&
+                        snapshot.data!.data() != null) {
+                      Map<String, dynamic> data =
+                          snapshot.data!.data() as Map<String, dynamic>;
 
-                  } else {
-                    // show an error message
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          'โปรดกรอกชื่อ$_selectedusername, หัววัด$_selecteddetector รายละเอียด$_selecteddetecinfo'),
-                      duration: Duration(seconds: 2),
-                    ));
-                  }
-                  // Perform action on submit
-                },
-              ),
-            ],
+                      return Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Color.fromARGB(255, 245, 207, 41),
+                                width: 5)),
+                        child: Column(
+                          children: <Widget>[
+                            Text('ค่าconversion factor' +
+                                ' ' +
+                                data['conversionfactor'].toString()),
+                            Text('ประเภทหัววัด' + ' ' + data['type']),
+                            Text('หมายเหตุ' + ' ' + data['note']),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Text("กรุณาเลือกหัววัด ");
+                    }
+                  },
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                  child: Text(
+                      'หากไม่มีข้อมูลในตัวเลือกสามารถไปบันทึกได้ที่หน้าบันทึกข้อมูล'),
+                ),
+                ElevatedButton(
+                  child: Text('Submit'),
+                  onPressed: () {
+                    if (_selectedusername?.isNotEmpty == true &&
+                        _selecteddetector?.isNotEmpty == true &&
+                        _selectedworksite?.isNotEmpty == true) {
+                      FirebaseFirestore.instance
+                          .collection("ไซต์งาน")
+                          .doc(_selectedworksite)
+                          .collection('ผู้วัดรังสี')
+                          .doc(_selectedusername)
+                          .collection('หัววัด')
+                          .doc(_selecteddetector)
+                          .set({});
+
+                      start.selectedworksite = _selectedworksite!;
+                      start.selectedusername = _selectedusername!;
+                      start.selecteddetector = _selecteddetector!;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapsPage(),
+                        ),
+                      ); //navigator
+
+                    } else {
+                      // show an error message
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            'โปรดกรอกชื่อ$_selectedusername, หัววัด$_selecteddetector รายละเอียด$_selectedworksite'),
+                        duration: Duration(seconds: 2),
+                      ));
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ));
   }

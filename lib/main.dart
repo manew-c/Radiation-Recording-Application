@@ -4,6 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_application_1/Pages/autopage.dart';
+import 'package:flutter_application_1/Pages/saveuser.dart';
+import 'package:flutter_application_1/Pages/saveworksite.dart';
+import 'package:flutter_application_1/Pages/try.dart';
+import 'package:flutter_application_1/Pages/aaa.dart';
+import 'package:flutter_application_1/Pages/newuserpage.dart';
+import 'package:flutter_application_1/Pages/choosepage.dart';
+import 'package:flutter_application_1/Pages/savedetector.dart';
+import 'package:flutter_application_1/map.dart';
 import 'Provider/Transaction_provider.dart';
 
 void main() async {
@@ -59,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('ยินดีต้อนรับ'),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.all(30),
                   child: SizedBox(
                     width: 200,
@@ -69,7 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => informationPage(),
+                                builder: (context) =>
+                                    MapsPage(), //แก้new project
                               ));
                         },
                         child: const Text(
@@ -77,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: TextStyle(fontSize: 18),
                         )),
                   ),
-                ),
+                ),*/
+
                 SizedBox(
                     width: 200,
                     height: 50,
@@ -87,11 +97,62 @@ class _MyHomePageState extends State<MyHomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Autopage(), //เปลี่ยนหน้าloadตรงนนี้จ้า
+                                    newuserpage(), //เปลี่ยนหน้autoตรงนนี้จ้า
                               ));
                         },
                         child: const Text(
-                          'Load',
+                          'start',
+                          style: TextStyle(fontSize: 18),
+                        ))),
+                SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    saveworksitePage(), //เปลี่ยนหน้าloadตรงนนี้จ้า
+                              ));
+                        },
+                        child: const Text(
+                          'บันทึกข้อมูลไซต์งาน',
+                          style: TextStyle(fontSize: 18),
+                        ))),
+                SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    saveuserPage(), //เปลี่ยนหน้userตรงนนี้จ้า
+                              ));
+                        },
+                        child: const Text(
+                          'บันทึกข้อมูลผู้ใช้งาน',
+                          style: TextStyle(fontSize: 18),
+                        ))),
+                SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                SizedBox(
+                    width: 200,
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    savedetectorPage(), //เปลี่ยนหน้าdetectorตรงนี้จ้า
+                              ));
+                        },
+                        child: const Text(
+                          'บันทึกข้อมูลหัววัดรังสี',
                           style: TextStyle(fontSize: 18),
                         ))),
               ],
