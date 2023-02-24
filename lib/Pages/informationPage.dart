@@ -18,7 +18,7 @@ class _informationPageState extends State<informationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('ข้อมูลPROJECT'),
+          title: const Text('ข้อมูลPROJECT'),
         ),
         body: Form(
             key: _formKey,
@@ -29,7 +29,7 @@ class _informationPageState extends State<informationPage> {
                   children: [
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'ไซต์งาน', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value! == '') {
@@ -43,7 +43,7 @@ class _informationPageState extends State<informationPage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'จังหวัด', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value! == '') {
@@ -55,7 +55,7 @@ class _informationPageState extends State<informationPage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'รายละเอียดเพิ่มเติม',
                           icon: Icon(Icons.key)),
                       validator: (value) {
@@ -95,10 +95,11 @@ class _informationPageState extends State<informationPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => userpage()));
+                                        builder: (context) =>
+                                            const userpage()));
                               }
                             }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา
-                            child: Text('บันทึก'),
+                            child: const Text('บันทึก'),
                           ),
                         ],
                       ),

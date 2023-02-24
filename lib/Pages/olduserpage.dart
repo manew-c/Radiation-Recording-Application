@@ -17,7 +17,7 @@ class _userpageState extends State<userpage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('เลือกผู้ใช้และหัววัด'),
+          title: const Text('เลือกผู้ใช้และหัววัด'),
         ),
         body: Form(
             key: _formKey,
@@ -30,7 +30,7 @@ class _userpageState extends State<userpage> {
                         'ขณะนี้คุณอยู่ที่ไซต์งาน${Point.worksite}จังหวัด${Point.province}'),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'ชื่อผู้บันทึก', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value! == '') {
@@ -44,7 +44,7 @@ class _userpageState extends State<userpage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'หัววัด', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value! == '') {
@@ -56,7 +56,7 @@ class _userpageState extends State<userpage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'รายละเอียดหัววัด', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value! == '') {
@@ -104,10 +104,11 @@ class _userpageState extends State<userpage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MapsPage()));
+                                        builder: (context) =>
+                                            const MapsPage()));
                               }
                             },
-                            child: Text('บันทึก'),
+                            child: const Text('บันทึก'),
                           )
                         ],
                       ),

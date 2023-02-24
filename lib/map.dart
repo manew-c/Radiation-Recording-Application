@@ -125,98 +125,91 @@ class _MapsPageState extends State<MapsPage> {
                               onSaved: (value) => MAP.pointname = (value!),
                             ),
                             const SizedBox(height: 10),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: (TextFormField(
-                                    decoration: const InputDecoration(
-                                      hintText:
-                                          'กรอกค่าDoseที่ 5 cm กรอกหรือไม่กรอกก็ได้',
-                                      labelText: 'Dose ที่ 5 cm',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    validator: (value) {
-                                      //อันนี้มันoptional
-                                      if (isFloat(value!) == false) {
-                                        return 'ค่าที่กรอกไม่ใช่ตัวเลข';
-                                      }
-                                      return null; //อย่าลืมแก้
-                                    },
-                                    onSaved: (value) {
-                                      if (value!.isNotEmpty == true) {
-                                        MAP.dose5cm = double.parse(value);
-                                      }
-                                    },
-                                  )),
+
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                hintText:
+                                    'กรอกค่าDoseที่ 5 cm กรอกหรือไม่กรอกก็ได้',
+                                labelText: 'Dose ที่ 5 cm',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                //อันนี้มันoptional
+                                if (isFloat(value!) == false) {
+                                  return 'ค่าที่กรอกไม่ใช่ตัวเลข';
+                                }
+                                return null; //อย่าลืมแก้
+                              },
+                              onSaved: (value) {
+                                if (value!.isNotEmpty == true) {
+                                  MAP.dose5cm = double.parse(value);
+                                }
+                              },
+                            ),
+
+                            //ใส่dropอันที่1
+                            DropdownButton<String>(
+                              items: const [
+                                DropdownMenuItem<String>(
+                                  value: 'µSv/h',
+                                  child: Text('µSv/h'),
                                 ),
-                                //ใส่dropอันที่1
-                                DropdownButton<String>(
-                                  items: const [
-                                    DropdownMenuItem<String>(
-                                      value: 'µSv/h',
-                                      child: Text('µSv/h'),
-                                    ),
-                                    DropdownMenuItem<String>(
-                                      value: 'nSv/h',
-                                      child: Text('nSv/h'),
-                                    ),
-                                  ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      MAP.unit = value!;
-                                      _selectedunit5cm = value;
-                                    });
-                                  },
-                                  hint: const Text('เลือกหน่วย'),
-                                  value: _selectedunit5cm,
+                                DropdownMenuItem<String>(
+                                  value: 'nSv/h',
+                                  child: Text('nSv/h'),
                                 ),
                               ],
+                              onChanged: (value) {
+                                setState(() {
+                                  MAP.unit = value!;
+                                  _selectedunit5cm = value;
+                                });
+                              },
+                              hint: const Text('เลือกหน่วย'),
+                              value: _selectedunit5cm,
                             ),
+
                             const SizedBox(height: 10),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: (TextFormField(
-                                    decoration: const InputDecoration(
-                                      hintText: 'กรอกค่าDoseที่ 1 m',
-                                      labelText: 'Dose ที่1m',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    validator: (value) {
-                                      if (value == '') {
-                                        return 'โปรดใส่ค่า Doseที่ 1 m';
-                                      } else if (isFloat(value!) == false) {
-                                        return 'ค่าที่กรอกไม่ใช่ตัวเลข';
-                                      }
-                                      return null;
-                                    },
-                                    onSaved: (value) =>
-                                        MAP.dose1m = double.parse(value!),
-                                  )),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                hintText: 'กรอกค่าDoseที่ 1 m',
+                                labelText: 'Dose ที่1m',
+                                border: OutlineInputBorder(),
+                              ),
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'โปรดใส่ค่า Doseที่ 1 m';
+                                } else if (isFloat(value!) == false) {
+                                  return 'ค่าที่กรอกไม่ใช่ตัวเลข';
+                                }
+                                return null;
+                              },
+                              onSaved: (value) =>
+                                  MAP.dose1m = double.parse(value!),
+                            ),
+
+                            //อันที่2
+                            DropdownButton<String>(
+                              items: const [
+                                DropdownMenuItem<String>(
+                                  value: 'µSv/h',
+                                  child: Text('µSv/h'),
                                 ),
-                                //อันที่2
-                                DropdownButton<String>(
-                                  items: const [
-                                    DropdownMenuItem<String>(
-                                      value: 'µSv/h',
-                                      child: Text('µSv/h'),
-                                    ),
-                                    DropdownMenuItem<String>(
-                                      value: 'nSv/h',
-                                      child: Text('nSv/h'),
-                                    ),
-                                  ],
-                                  onChanged: (value) {
-                                    setState(() {
-                                      MAP.unit = value!;
-                                      _selectedunit1m = value;
-                                    });
-                                  },
-                                  hint: const Text('เลือกหน่วย'),
-                                  value: _selectedunit1m,
+                                DropdownMenuItem<String>(
+                                  value: 'nSv/h',
+                                  child: Text('nSv/h'),
                                 ),
                               ],
+                              onChanged: (value) {
+                                setState(() {
+                                  MAP.unit = value!;
+                                  _selectedunit1m = value;
+                                });
+                              },
+                              hint: const Text('เลือกหน่วย'),
+                              value: _selectedunit1m,
                             ),
+
                             const SizedBox(height: 10),
                             TextFormField(
                               decoration: const InputDecoration(

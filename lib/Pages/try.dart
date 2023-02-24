@@ -20,7 +20,7 @@ class _tryPageState extends State<tryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('ข้อมูลPROJECT'),
+          title: const Text('ข้อมูลPROJECT'),
         ),
         body: Form(
             key: _formKey,
@@ -61,7 +61,7 @@ class _tryPageState extends State<tryPage> {
                                 debugPrint('ไม่มีค่าถึงปุ่มกด $out ');
                               }
                             },
-                            child: Text(
+                            child: const Text(
                                 'บันทึก'), //หน้าเลือกก็คือให้เลือก ไม่ต้องเช็ค เช็คแค่กรอกไม่กรอกพอ
                           ),
                         ],

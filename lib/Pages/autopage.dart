@@ -147,10 +147,10 @@ class _AutopageState extends State<Autopage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("หน้าไซต์งานทดสอบdropdown"),
+          title: const Text("หน้าไซต์งานทดสอบdropdown"),
         ),
         body: Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(8.0),
               child: Form(
@@ -194,7 +194,7 @@ class _AutopageState extends State<Autopage> {
                                   );
                                 },
                               )),*/
-                    Text(
+                    const Text(
                       'เลือกจังหวัด',
                       textAlign: TextAlign.left,
                     ),
@@ -223,7 +223,7 @@ class _AutopageState extends State<Autopage> {
 
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text('บันทึกไซต์งาน  $out เรียบร้อย'),
-                            duration: Duration(seconds: 4),
+                            duration: const Duration(seconds: 4),
                           ));
 
                           /*FirebaseFirestore.instance
@@ -235,9 +235,9 @@ class _AutopageState extends State<Autopage> {
                           //_formKey.currentState!.reset();
                         }
                       }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา
-                      child: Text('บันทึก'),
+                      child: const Text('บันทึก'),
                     ),
-                    SizedBox(height: 30), //ช่องว่างเฉยๆ
+                    const SizedBox(height: 30), //ช่องว่างเฉยๆ
                     ElevatedButton(
                       onPressed: () async {
                         const url = 'https://nuclear-app-cf4ef.web.app/';

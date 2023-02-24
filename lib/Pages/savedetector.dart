@@ -21,7 +21,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('บันทึกข้อมูลหัววัดรังสี'),
+          title: const Text('บันทึกข้อมูลหัววัดรังสี'),
         ),
         body: Form(
             key: _formKey,
@@ -32,7 +32,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                   children: [
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'ชื่อหัววัด', icon: Icon(Icons.key)),
                       validator: (value1) {
                         if (value1!.isEmpty) {
@@ -45,7 +45,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'ประเภทหัววัด', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -58,7 +58,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'ค่าconversion factor',
                           icon: Icon(Icons.key)),
                       validator: (value) {
@@ -75,7 +75,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'รายละเอียดอื่นๆ', icon: Icon(Icons.key)),
                       validator: (value3) {
                         if (value3!.isEmpty) {
@@ -101,7 +101,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                                     .showSnackBar(SnackBar(
                                   content: Text(
                                       'บันทึกหัววัด  $savedetectorname  เรียบร้อย'),
-                                  duration: Duration(seconds: 10),
+                                  duration: const Duration(seconds: 10),
                                 ));
 
                                 FirebaseFirestore.instance
@@ -115,7 +115,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                                 _formKey.currentState!.reset();
                               }
                             }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา
-                            child: Text('บันทึก'),
+                            child: const Text('บันทึก'),
                           ),
                         ],
                       ),

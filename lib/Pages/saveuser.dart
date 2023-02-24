@@ -17,7 +17,7 @@ class _saveuserPageState extends State<saveuserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('บันทึกข้อมูลผู้ใช้งาน'),
+          title: const Text('บันทึกข้อมูลผู้ใช้งาน'),
         ),
         body: Form(
             key: _formKey,
@@ -28,7 +28,7 @@ class _saveuserPageState extends State<saveuserPage> {
                   children: [
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'ชื่อผู้ใช้', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -54,7 +54,7 @@ class _saveuserPageState extends State<saveuserPage> {
                                     .showSnackBar(SnackBar(
                                   content: Text(
                                       'บันทึกชื่อผู้ใช้  ${saveusername}  เรียบร้อย'),
-                                  duration: Duration(seconds: 10),
+                                  duration: const Duration(seconds: 10),
                                 ));
 
                                 FirebaseFirestore.instance
@@ -64,7 +64,7 @@ class _saveuserPageState extends State<saveuserPage> {
                                 _formKey.currentState!.reset();
                               }
                             }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา
-                            child: Text('บันทึก'),
+                            child: const Text('บันทึก'),
                           ),
                         ],
                       ),

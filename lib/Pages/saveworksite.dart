@@ -19,7 +19,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('บันทึกข้อมูลไซต์งาน'),
+          title: const Text('บันทึกข้อมูลไซต์งาน'),
         ),
         body: Form(
             key: _formKey,
@@ -30,7 +30,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                   children: [
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'ไซต์งาน', icon: Icon(Icons.key)),
                       validator: (value1) {
                         if (value1!.isEmpty) {
@@ -43,7 +43,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'จังหวัด', icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -56,7 +56,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                     ),
                     TextFormField(
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           labelText: 'รายละเอียดอื่นๆ', icon: Icon(Icons.key)),
                       validator: (value3) {
                         if (value3!.isEmpty) {
@@ -82,7 +82,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                                     .showSnackBar(SnackBar(
                                   content: Text(
                                       'บันทึกไซต์งาน  $saveworksite จังหวัด$saveprovince  และรายละเอียด เรียบร้อย'),
-                                  duration: Duration(seconds: 10),
+                                  duration: const Duration(seconds: 10),
                                 ));
 
                                 FirebaseFirestore.instance
@@ -95,7 +95,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                                 _formKey.currentState!.reset();
                               }
                             }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา
-                            child: Text('บันทึก'),
+                            child: const Text('บันทึก'),
                           ),
                         ],
                       ),

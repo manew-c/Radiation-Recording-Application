@@ -76,7 +76,7 @@ class _newuserpageState extends State<newuserpage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('เลือกไซต์งาน ผู้วัด และหัววัด'),
+          title: const Text('เลือกไซต์งาน ผู้วัด และหัววัด'),
         ),
         body: Container(
           padding: const EdgeInsets.all(30.0),
@@ -87,7 +87,7 @@ class _newuserpageState extends State<newuserpage> {
                   children: <Widget>[
                     Expanded(
                       child: (TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'กรอกไซต์งาน',
                           border: OutlineInputBorder(),
                         ),
@@ -122,13 +122,13 @@ class _newuserpageState extends State<newuserpage> {
                             },
                           );
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 StreamBuilder(
                   stream: worksitedatabase.doc(_selectedworksite).snapshots(),
                   builder: (BuildContext context,
@@ -137,9 +137,9 @@ class _newuserpageState extends State<newuserpage> {
                       return Text("Error: ${snapshot.error}");
                     } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return Text("Loading...");
+                      return const Text("Loading...");
                     } else if (!snapshot.hasData) {
-                      return Text("Document does not exist");
+                      return const Text("Document does not exist");
                     } else if (snapshot.hasData &&
                         snapshot.data!.data() != null) {
                       Map<String, dynamic> data =
@@ -154,16 +154,16 @@ class _newuserpageState extends State<newuserpage> {
                         ],
                       );
                     } else {
-                      return Text("กรุณาเลือกไซต์งาน ");
+                      return const Text("กรุณาเลือกไซต์งาน ");
                     }
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: (TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'กรอกชื่อผู้วัด',
                           border: OutlineInputBorder(),
                         ),
@@ -179,7 +179,7 @@ class _newuserpageState extends State<newuserpage> {
                         },
                       )),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     FutureBuilder(
                       future: fetchDatausername(),
                       builder: (context, snapshot) {
@@ -200,18 +200,18 @@ class _newuserpageState extends State<newuserpage> {
                             },
                           );
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: <Widget>[
                     Expanded(
                       child: (TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'กรอกหัววัด',
                           border: OutlineInputBorder(),
                         ),
@@ -226,7 +226,7 @@ class _newuserpageState extends State<newuserpage> {
                         },
                       )),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     FutureBuilder(
                       future: fetchDatadetector(),
                       builder: (context, snapshot) {
@@ -247,13 +247,13 @@ class _newuserpageState extends State<newuserpage> {
                             },
                           );
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 StreamBuilder(
                   stream: detectordatabase.doc(_selecteddetector).snapshots(),
                   builder: (BuildContext context,
@@ -262,9 +262,9 @@ class _newuserpageState extends State<newuserpage> {
                       return Text("Error: ${snapshot.error}");
                     } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return Text("Loading...");
+                      return const Text("Loading...");
                     } else if (!snapshot.hasData) {
-                      return Text("Document does not exist");
+                      return const Text("Document does not exist");
                     } else if (snapshot.hasData &&
                         snapshot.data!.data() != null) {
                       Map<String, dynamic> data =
@@ -273,7 +273,7 @@ class _newuserpageState extends State<newuserpage> {
                       return Container(
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: Color.fromARGB(255, 245, 207, 41),
+                                color: const Color.fromARGB(255, 245, 207, 41),
                                 width: 5)),
                         child: Column(
                           children: <Widget>[
@@ -286,17 +286,17 @@ class _newuserpageState extends State<newuserpage> {
                         ),
                       );
                     } else {
-                      return Text("กรุณาเลือกหัววัด ");
+                      return const Text("กรุณาเลือกหัววัด ");
                     }
                   },
                 ),
-                SizedBox(height: 20),
-                SizedBox(
+                const SizedBox(height: 20),
+                const SizedBox(
                   child: Text(
                       'หากไม่มีข้อมูลในตัวเลือกสามารถไปบันทึกได้ที่หน้าบันทึกข้อมูล'),
                 ),
                 ElevatedButton(
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                   onPressed: () {
                     if (_selectedusername?.isNotEmpty == true &&
                         _selecteddetector?.isNotEmpty == true &&
@@ -316,7 +316,7 @@ class _newuserpageState extends State<newuserpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MapsPage(),
+                          builder: (context) => const MapsPage(),
                         ),
                       ); //navigator
 
@@ -325,7 +325,7 @@ class _newuserpageState extends State<newuserpage> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                             'โปรดกรอกชื่อ$_selectedusername, หัววัด$_selecteddetector รายละเอียด$_selectedworksite'),
-                        duration: Duration(seconds: 2),
+                        duration: const Duration(seconds: 2),
                       ));
                     }
                   },
