@@ -20,6 +20,17 @@ class _MapsPageState extends State<MapsPage> {
   String? _selectedunit5cm;
   String? _selectedunit1m;
 
+  DocumentReference<Map<String, dynamic>> detectordatabase = FirebaseFirestore
+      .instance
+      .collection('หัววัดall')
+      .doc(start.selecteddetector);
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getDetectorName() async {
+    final DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await detectordatabase.get();
+    return snapshot;
+  }
+
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -102,10 +113,27 @@ class _MapsPageState extends State<MapsPage> {
                 context: context,
                 builder: (context) {
                   return SingleChildScrollView(
-                    padding: const EdgeInsets.all(8.0),
+                    //padding: const EdgeInsets.all(8.0),
                     child: AlertDialog(
                       title: Text(
                           'Your location!\nlat: ${userlocation.latitude} long: ${userlocation.longitude} '),
+                      actions: [
+                        // add buttons here
+                        ButtonBar(
+                          children: [
+                            ElevatedButton(
+                              child: Text(
+                                "Close",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                          alignment: MainAxisAlignment.end,
+                        ),
+                      ],
                       content: Form(
                         key: _formKey,
                         child: Column(
@@ -146,7 +174,7 @@ class _MapsPageState extends State<MapsPage> {
                                 }
                               },
                             ),
-
+                            const SizedBox(height: 10),
                             //ใส่dropอันที่1
                             DropdownButton<String>(
                               items: const [
@@ -231,6 +259,12 @@ class _MapsPageState extends State<MapsPage> {
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
+                                  final DocumentSnapshot<Map<String, dynamic>>
+                                      snapshot = await getDetectorName();
+                                  final Map<String, dynamic>? dato =
+                                      snapshot.data();
+                                  final double conversion =
+                                      dato!['conversionfactor'].toDouble();
                                   CollectionReference siteandprovind =
                                       FirebaseFirestore.instance
                                           .collection('ไซต์งาน');
@@ -243,9 +277,9 @@ class _MapsPageState extends State<MapsPage> {
                                       .collection('ชื่อจุด')
                                       .doc(MAP.pointname)
                                       .set({
-                                    'dose1m': MAP.dose1m,
+                                    'dose1m': MAP.dose1m * conversion,
                                     'doseunit1m': _selectedunit1m,
-                                    'dose5cm': MAP.dose5cm,
+                                    'dose5cm': MAP.dose5cm * conversion,
                                     'doseunit5cm': _selectedunit5cm,
                                     'Unit': MAP.unit,
                                     'lat': userlocation.latitude,

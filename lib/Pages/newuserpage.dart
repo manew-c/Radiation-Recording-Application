@@ -324,7 +324,7 @@ class _newuserpageState extends State<newuserpage> {
                       // show an error message
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                            'โปรดกรอกชื่อ$_selectedusername, หัววัด$_selecteddetector รายละเอียด$_selectedworksite'),
+                            'โปรดเลือกไซต์งาน$_selectedworksite ชื่อ$_selectedusername, หัววัด$_selecteddetector '),
                         duration: const Duration(seconds: 2),
                       ));
                     }

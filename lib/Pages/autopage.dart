@@ -16,12 +16,12 @@ class _AutopageState extends State<Autopage> {
   final CollectionReference _worksitecollection =
       FirebaseFirestore.instance.collection('allworksite');
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController _textworksiteController = TextEditingController();
-  TextEditingController _textprovinceController = TextEditingController();
-  List<String> _listautoworksite = <String>[];
+  final TextEditingController _textworksiteController = TextEditingController();
+  final TextEditingController _textprovinceController = TextEditingController();
+  final List<String> _listautoworksite = <String>[];
   List<String> _filteredworksite = [];
   List<String> _filteredprovince = [];
-  List<String> _listautoprovince = <String>[
+  final List<String> _listautoprovince = <String>[
     'กรุงเทพมหานคร',
     'จังหวัดกระบี่',
     'จังหวัดกาญจนบุรี',
@@ -198,6 +198,7 @@ class _AutopageState extends State<Autopage> {
                       'เลือกจังหวัด',
                       textAlign: TextAlign.left,
                     ),
+                    //gibj,muj9i'เริ่มที่ตรงนี้จ้าา
                     Autocomplete<String>(
                       optionsBuilder: (TextEditingValue textEditingValue) {
                         if (textEditingValue.text == '') {
@@ -213,6 +214,7 @@ class _AutopageState extends State<Autopage> {
                         out = selection;
                       },
                     ),
+                    //ปุ่มกดจ้าาาา
                     ElevatedButton(
                       onPressed: () async {
                         if (out != '') {

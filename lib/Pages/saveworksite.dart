@@ -12,8 +12,87 @@ class _saveworksitePageState extends State<saveworksitePage> {
   final _formKey = GlobalKey<FormState>();
   final SERIES = TextEditingController();
   String? saveworksite;
-  String? saveprovince;
+  String? saveprovince = '';
   String? savenote;
+  final _listprovince = <String>[
+    'กรุงเทพมหานคร',
+    'กระบี่',
+    'กาญจนบุรี',
+    'กาฬสินธุ์',
+    'กำแพงเพชร',
+    'ขอนแก่น',
+    'จันทบุรี',
+    'ฉะเชิงเทรา',
+    'ชลบุรี',
+    'ชัยนาท',
+    'ชัยภูมิ',
+    'ชุมพร',
+    'เชียงราย',
+    'เชียงใหม่',
+    'ตรัง',
+    'ตราด',
+    'ตาก',
+    'นครนายก',
+    'นครปฐม',
+    'นครพนม',
+    'นครราชสีมา',
+    'นครศรีธรรมราช',
+    'นครสวรรค์',
+    'นนทบุรี',
+    'นราธิวาส',
+    'น่าน',
+    'บึงกาฬ',
+    'บุรีรัมย์',
+    'ปทุมธานี',
+    'ประจวบคีรีขันธ์',
+    'ปราจีนบุรี',
+    'ปัตตานี',
+    'พระนครศรีอยุธยา',
+    'พะเยา',
+    'พังงา',
+    'พัทลุง',
+    'พิจิตร',
+    'พิษณุโลก',
+    'เพชรบุรี',
+    'เพชรบูรณ',
+    'แพร่',
+    'ภูเก็ต',
+    'มหาสารคาม',
+    'มุกดาหาร',
+    'แม่ฮ่องสอน',
+    'ยโสธร',
+    'ยะลา',
+    'ร้อยเอ็ด',
+    'ระนอง',
+    'ระยอง',
+    'ราชบุรี',
+    'ลพบุรี',
+    'ลำปาง',
+    'ลำพูน',
+    'เลย',
+    'ศรีสะเกษ',
+    'สกลนคร',
+    'สงขลา',
+    'สตูล',
+    'สมุทรปราการ',
+    'สมุทรสงคราม',
+    'สมุทรสาคร',
+    'สระแก้ว',
+    'หนองบัวลำภู',
+    'สระบุรี',
+    'สิงห์บุรี',
+    'สุโขทัย',
+    'สุพรรณบุรี',
+    'สุราษฎร์ธานี',
+    'สุรินทร์',
+    'หนองคาย',
+    'อ้างทอง',
+    'อำนาจเจริญ',
+    'อุดรธานี',
+    'อุตรดิตถ์',
+    'อุทัยธานี',
+    'อุบลราชธานี'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +120,80 @@ class _saveworksitePageState extends State<saveworksitePage> {
                       onSaved: (value1) => saveworksite = value1!,
                       //controller: SERIES,
                     ),
-                    TextFormField(
+                    const SizedBox(height: 10),
+                    //เลือกจังหวัดจ้าาาาาาาา
+                    /*Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: (TextField(
+                            decoration: const InputDecoration(
+                              labelText: 'กรอกจังหวัด',
+                              border: OutlineInputBorder(),
+                            ),
+                            controller: _textControllerdetectinfo,
+                            onChanged: (value) async {
+                              Set<String> filteredOptions = _listprovince
+                                  .where((option) => option.startsWith(value))
+                                  .toSet();
+                              setState(() {
+                                _listprovince = filteredOptions;
+                              });
+                            },
+                          )),
+                        ),
+                        SizedBox(width: 50),
+                        Expanded(
+                          child: DropdownButton(
+                            hint: Text('เลือกจังหวัด'),
+                            value: _selectedprovince,
+                            items: _listprovince
+                                .map((option) => DropdownMenuItem(
+                                      value: option,
+                                      child: Text(option),
+                                    ))
+                                .toList(),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedprovince = newValue!;
+                                _textControllerdetectinfo.text = newValue;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),*/
+                    Row(
+                      children: [
+                        const SizedBox(child: Icon(Icons.key)),
+                        const SizedBox(width: 20),
+                        const SizedBox(child: Text('จังหวัด')),
+                        SizedBox(
+                            width: 400, // set a fixed width
+                            child: Autocomplete<String>(
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text == '') {
+                                  return const Iterable<String>.empty();
+                                }
+                                return _listprovince.where((String option) {
+                                  return option.contains(
+                                      textEditingValue.text.toLowerCase());
+                                });
+                              },
+                              onSelected: (String selection) {
+                                if (selection.isEmpty) {
+                                  saveprovince = '';
+                                } else {
+                                  debugPrint('You just selected $selection');
+                                  saveprovince = selection;
+                                }
+                              },
+                            )),
+                      ],
+                    ),
+
+                    const SizedBox(height: 10),
+                    /*TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
                           labelText: 'จังหวัด', icon: Icon(Icons.key)),
@@ -53,7 +205,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                       },
                       onSaved: (value) => saveprovince = value!,
                       //controller: SERIES,
-                    ),
+                    ),*/
                     TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
@@ -75,7 +227,8 @@ class _saveworksitePageState extends State<saveworksitePage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
+                              if (_formKey.currentState!.validate() &
+                                  saveprovince!.isNotEmpty) {
                                 _formKey.currentState?.save();
 
                                 ScaffoldMessenger.of(context)
@@ -93,6 +246,12 @@ class _saveworksitePageState extends State<saveworksitePage> {
                                   'note': savenote
                                 });
                                 _formKey.currentState!.reset();
+                              } else if (saveprovince == '') {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('กรุณาเลือกจังหวัด'),
+                                  duration: const Duration(seconds: 10),
+                                ));
                               }
                             }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา
                             child: const Text('บันทึก'),
