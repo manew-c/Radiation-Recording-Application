@@ -168,7 +168,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                         const SizedBox(width: 20),
                         const SizedBox(child: Text('จังหวัด')),
                         SizedBox(
-                            width: 400, // set a fixed width
+                            width: 200, // set a fixed width
                             child: Autocomplete<String>(
                               optionsBuilder:
                                   (TextEditingValue textEditingValue) {

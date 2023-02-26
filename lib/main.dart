@@ -48,21 +48,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Radiation Recording"),
-        actions: [const Icon(Icons.album_outlined)],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
+    return Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+              Color.fromARGB(255, 231, 180, 240),
+              Color.fromARGB(255, 255, 168, 7)
+            ])),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: const Text("Radiation Recording"),
+            actions: [const Icon(Icons.album_outlined)],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('ยินดีต้อนรับ'),
-                /*Padding(
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('ยินดีต้อนรับ', style: TextStyle(fontSize: 20)),
+                    /*Padding(
                   padding: EdgeInsets.all(30),
                   child: SizedBox(
                     width: 200,
@@ -83,96 +93,96 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),*/
 
-                SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const newuserpage(), //เปลี่ยนหน้autoตรงนนี้จ้า
-                              ));
-                        },
-                        child: const Text(
-                          'start',
-                          style: TextStyle(fontSize: 18),
-                        ))),
-                const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
-                SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const saveworksitePage(), //เปลี่ยนหน้าloadตรงนนี้จ้า
-                              ));
-                        },
-                        child: const Text(
-                          'บันทึกข้อมูลไซต์งาน',
-                          style: TextStyle(fontSize: 18),
-                        ))),
-                const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
-                SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const saveuserPage(), //เปลี่ยนหน้userตรงนนี้จ้า
-                              ));
-                        },
-                        child: const Text(
-                          'บันทึกข้อมูลผู้ใช้งาน',
-                          style: TextStyle(fontSize: 18),
-                        ))),
-                const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
-                SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const savedetectorPage(), //เปลี่ยนหน้าdetectorตรงนี้จ้า
-                              ));
-                        },
-                        child: const Text(
-                          'บันทึกข้อมูลหัววัดรังสี',
-                          style: TextStyle(fontSize: 18),
-                        ))),
-                const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
-                SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          const url = 'https://nuclear-app-cf4ef.web.app/';
-                          final uri = Uri.encodeFull(url);
-                          if (await canLaunchUrlString(uri)) {
-                            await launchUrlString(uri);
-                          } else {
-                            throw 'Could not launch $uri';
-                          }
-                        },
-                        child: const Text(
-                          'ไปหน้าเว็บไซต์',
-                          style: TextStyle(fontSize: 18),
-                        ))),
+                    SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const newuserpage(), //เปลี่ยนหน้autoตรงนนี้จ้า
+                                  ));
+                            },
+                            child: const Text(
+                              'start',
+                              style: TextStyle(fontSize: 18),
+                            ))),
+                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                    SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const saveworksitePage(), //เปลี่ยนหน้าloadตรงนนี้จ้า
+                                  ));
+                            },
+                            child: const Text(
+                              'บันทึกข้อมูลไซต์งาน',
+                              style: TextStyle(fontSize: 18),
+                            ))),
+                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                    SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const saveuserPage(), //เปลี่ยนหน้userตรงนนี้จ้า
+                                  ));
+                            },
+                            child: const Text(
+                              'บันทึกชื่อผู้ใช้งาน',
+                              style: TextStyle(fontSize: 18),
+                            ))),
+                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                    SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const savedetectorPage(), //เปลี่ยนหน้าdetectorตรงนี้จ้า
+                                  ));
+                            },
+                            child: const Text(
+                              'บันทึกข้อมูลหัววัดรังสี',
+                              style: TextStyle(fontSize: 18),
+                            ))),
+                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                    SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              const url = 'https://nuclear-app-cf4ef.web.app/';
+                              final uri = Uri.encodeFull(url);
+                              if (await canLaunchUrlString(uri)) {
+                                await launchUrlString(uri);
+                              } else {
+                                throw 'Could not launch $uri';
+                              }
+                            },
+                            child: const Text(
+                              'ไปหน้าเว็บไซต์',
+                              style: TextStyle(fontSize: 18),
+                            ))),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

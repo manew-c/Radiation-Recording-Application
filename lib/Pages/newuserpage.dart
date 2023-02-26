@@ -88,7 +88,7 @@ class _newuserpageState extends State<newuserpage> {
                     Expanded(
                       child: (TextField(
                         decoration: const InputDecoration(
-                          labelText: 'กรอกไซต์งาน',
+                          labelText: 'ไซต์งาน',
                           border: OutlineInputBorder(),
                         ),
                         controller: _textControllerdetectinfo,
@@ -164,7 +164,7 @@ class _newuserpageState extends State<newuserpage> {
                     Expanded(
                       child: (TextField(
                         decoration: const InputDecoration(
-                          labelText: 'กรอกชื่อผู้วัด',
+                          labelText: 'ชื่อผู้วัด',
                           border: OutlineInputBorder(),
                         ),
                         controller: _textControllerusername,
@@ -212,7 +212,7 @@ class _newuserpageState extends State<newuserpage> {
                     Expanded(
                       child: (TextField(
                         decoration: const InputDecoration(
-                          labelText: 'กรอกหัววัด',
+                          labelText: 'หัววัด',
                           border: OutlineInputBorder(),
                         ),
                         controller: _textControllerdetector,
