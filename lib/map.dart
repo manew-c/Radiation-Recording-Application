@@ -6,6 +6,7 @@ import 'package:string_validator/string_validator.dart'; //เป็นเคร
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart'; //ใช้ลิ้งเว็บ
 import 'package:flutter_application_1/Pages/allvariable.dart';
+import 'package:toggle_switch/toggle_switch.dart'; //ปุ่มแบบtoggle
 
 class MapsPage extends StatefulWidget {
   const MapsPage({super.key});
@@ -120,9 +121,23 @@ class _MapsPageState extends State<MapsPage> {
                       actions: [
                         // add buttons here
                         ButtonBar(
+                          alignment: MainAxisAlignment.end,
                           children: [
                             ElevatedButton(
-                              child: Text(
+                              onPressed: () async {
+                                const url =
+                                    'https://nuclear-app-cf4ef.web.app/';
+                                final uri = Uri.encodeFull(url);
+                                if (await canLaunchUrlString(uri)) {
+                                  await launchUrlString(uri);
+                                } else {
+                                  throw 'Could not launch $uri';
+                                }
+                              },
+                              child: const Text('กดดูcontour map'),
+                            ),
+                            ElevatedButton(
+                              child: const Text(
                                 "Close",
                                 style: TextStyle(fontSize: 20),
                               ),
@@ -131,7 +146,6 @@ class _MapsPageState extends State<MapsPage> {
                               },
                             ),
                           ],
-                          alignment: MainAxisAlignment.end,
                         ),
                       ],
                       content: Form(
@@ -176,7 +190,20 @@ class _MapsPageState extends State<MapsPage> {
                             ),
                             const SizedBox(height: 10),
                             //ใส่dropอันที่1
-                            DropdownButton<String>(
+                            ToggleSwitch(
+                              initialLabelIndex: 0,
+                              totalSwitches: 2,
+                              labels: ['µSv/h', 'nSv/h'],
+                              onToggle: (index) {
+                                if (index == 0) {
+                                  _selectedunit5cm = 'µSv/h';
+                                } else {
+                                  _selectedunit5cm = 'nSv/h';
+                                }
+                                print('unit5cm to: $_selectedunit5cm');
+                              },
+                            ),
+                            /*DropdownButton<String>(
                               items: const [
                                 DropdownMenuItem<String>(
                                   value: 'µSv/h',
@@ -189,13 +216,12 @@ class _MapsPageState extends State<MapsPage> {
                               ],
                               onChanged: (value) {
                                 setState(() {
-                                  MAP.unit = value!;
                                   _selectedunit5cm = value;
                                 });
                               },
                               hint: const Text('เลือกหน่วย'),
                               value: _selectedunit5cm,
-                            ),
+                            ),*/
 
                             const SizedBox(height: 10),
                             TextFormField(
@@ -215,9 +241,22 @@ class _MapsPageState extends State<MapsPage> {
                               onSaved: (value) =>
                                   MAP.dose1m = double.parse(value!),
                             ),
+                            ToggleSwitch(
+                              initialLabelIndex: 0,
+                              totalSwitches: 2,
+                              labels: ['µSv/h', 'nSv/h'],
+                              onToggle: (index) {
+                                if (index == 0) {
+                                  _selectedunit1m = 'µSv/h';
+                                } else {
+                                  _selectedunit1m = 'nSv/h';
+                                }
+                                print('unit1m to: $_selectedunit1m');
+                              },
+                            ),
 
                             //อันที่2
-                            DropdownButton<String>(
+                            /*DropdownButton<String>(
                               items: const [
                                 DropdownMenuItem<String>(
                                   value: 'µSv/h',
@@ -230,13 +269,12 @@ class _MapsPageState extends State<MapsPage> {
                               ],
                               onChanged: (value) {
                                 setState(() {
-                                  MAP.unit = value!;
                                   _selectedunit1m = value;
                                 });
                               },
                               hint: const Text('เลือกหน่วย'),
                               value: _selectedunit1m,
-                            ),
+                            ),*/
 
                             const SizedBox(height: 10),
                             TextFormField(
@@ -277,11 +315,14 @@ class _MapsPageState extends State<MapsPage> {
                                       .collection('ชื่อจุด')
                                       .doc(MAP.pointname)
                                       .set({
-                                    'dose1m': MAP.dose1m * conversion,
+                                    'dose1m': MAP.dose1m,
+                                    'conversion_dose1m':
+                                        MAP.dose1m * conversion,
                                     'doseunit1m': _selectedunit1m,
                                     'dose5cm': MAP.dose5cm * conversion,
+                                    'conversion_dose5cm':
+                                        MAP.dose5cm * conversion,
                                     'doseunit5cm': _selectedunit5cm,
-                                    'Unit': MAP.unit,
                                     'lat': userlocation.latitude,
                                     'long': userlocation.longitude,
                                     'note': MAP.note,
@@ -303,19 +344,6 @@ class _MapsPageState extends State<MapsPage> {
                                 );*/
                               },
                               child: const Center(child: Text("Submit")),
-                            ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                const url =
-                                    'https://nuclear-app-cf4ef.web.app/';
-                                final uri = Uri.encodeFull(url);
-                                if (await canLaunchUrlString(uri)) {
-                                  await launchUrlString(uri);
-                                } else {
-                                  throw 'Could not launch $uri';
-                                }
-                              },
-                              child: const Text('กดดูcontour map'),
                             ),
                           ],
                         ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class savedetectorPage extends StatefulWidget {
   const savedetectorPage({super.key});
@@ -43,7 +44,32 @@ class _savedetectorPageState extends State<savedetectorPage> {
                       onSaved: (value1) => savedetectorname = value1!,
                       //controller: SERIES,
                     ),
-                    TextFormField(
+                    SizedBox(height: 20),
+                    //ประเภทหัววัด
+                    SizedBox(
+                      child: Text(
+                        'เลือกชนิดหัววัด',
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    ToggleSwitch(
+                      customWidths: [90.0, 100.0, 120.0],
+                      initialLabelIndex: 0,
+                      totalSwitches: 3,
+                      labels: ['Gas-filled', 'Scintillation', 'Semiconductor'],
+                      onToggle: (index) {
+                        if (index == 0) {
+                          savedetectortype = 'Gas-filled';
+                        } else if (index == 1) {
+                          savedetectortype = 'Scintillation';
+                        } else if (index == 2) {
+                          savedetectortype = 'Semiconductor';
+                        }
+                        print('detector to: $savedetectortype');
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    /*TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
                           labelText: 'ประเภทหัววัด', icon: Icon(Icons.key)),
@@ -55,7 +81,8 @@ class _savedetectorPageState extends State<savedetectorPage> {
                       },
                       onSaved: (value) => savedetectortype = value!,
                       //controller: SERIES,
-                    ),
+                    ),*/
+
                     TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
