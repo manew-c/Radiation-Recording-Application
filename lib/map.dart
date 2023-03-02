@@ -241,6 +241,7 @@ class _MapsPageState extends State<MapsPage> {
                               onSaved: (value) =>
                                   MAP.dose1m = double.parse(value!),
                             ),
+                            const SizedBox(height: 10),
                             ToggleSwitch(
                               initialLabelIndex: 0,
                               totalSwitches: 2,
@@ -291,7 +292,7 @@ class _MapsPageState extends State<MapsPage> {
                               },
                               onSaved: (value) => MAP.note = value!,
                             ),
-                            const SizedBox(height: 20),
+
                             const SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () async {

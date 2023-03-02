@@ -53,10 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-              Color.fromARGB(255, 231, 180, 240),
-              Color.fromARGB(255, 255, 168, 7)
-            ])),
+                colors: [Colors.white, Color.fromARGB(255, 248, 184, 45)])),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
@@ -176,6 +173,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             },
                             child: const Text(
                               'ไปหน้าเว็บไซต์',
+                              style: TextStyle(fontSize: 18),
+                            ))),
+                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                    SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: () async {},
+                            child: const Text(
+                              'คู่มือใช้งานแอป',
                               style: TextStyle(fontSize: 18),
                             ))),
                   ],
