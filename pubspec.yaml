@@ -47,6 +47,8 @@ dependencies:
   url_launcher: ^6.1.9
   autocomplete_textfield: ^2.0.1
   toggle_switch: ^2.0.1
+  image_picker: ^0.8.7
+  video_player: ^2.6.0
   
 
 flutter_icons:

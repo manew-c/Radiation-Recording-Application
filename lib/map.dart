@@ -3,10 +3,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; //ใช้แปะtimestamp
 import 'package:string_validator/string_validator.dart'; //เป็นเครื่องเช็ค
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart'; //ใช้ลิ้งเว็บ
 import 'package:flutter_application_1/Pages/allvariable.dart';
 import 'package:toggle_switch/toggle_switch.dart'; //ปุ่มแบบtoggle
+import 'package:image_picker/image_picker.dart'; //อัพรูปภาพ
+import 'dart:io';
 
 class MapsPage extends StatefulWidget {
   const MapsPage({super.key});
@@ -20,6 +21,21 @@ class _MapsPageState extends State<MapsPage> {
   late GoogleMapController mapController;
   String? _selectedunit5cm;
   String? _selectedunit1m;
+  XFile? _pickedImage; // State variable to store the picked file
+  String? _pickedImageName; // State variable to store the file name
+
+  Future<void> _getImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        _pickedImage = XFile(pickedFile.path);
+        _pickedImageName = pickedFile.path.split('/').last;
+      });
+    }
+  }
 
   DocumentReference<Map<String, dynamic>> detectordatabase = FirebaseFirestore
       .instance
@@ -93,9 +109,9 @@ class _MapsPageState extends State<MapsPage> {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const CircularProgressIndicator(),
-                  const Text('กำลังโหลด'),
+                children: const <Widget>[
+                  CircularProgressIndicator(),
+                  Text('กำลังโหลด'),
                 ],
               ),
             );
@@ -193,14 +209,14 @@ class _MapsPageState extends State<MapsPage> {
                             ToggleSwitch(
                               initialLabelIndex: 0,
                               totalSwitches: 2,
-                              labels: ['µSv/h', 'nSv/h'],
+                              labels: const ['µSv/h', 'nSv/h'],
                               onToggle: (index) {
                                 if (index == 0) {
                                   _selectedunit5cm = 'µSv/h';
                                 } else {
                                   _selectedunit5cm = 'nSv/h';
                                 }
-                                print('unit5cm to: $_selectedunit5cm');
+                                debugPrint('unit5cm to: $_selectedunit5cm');
                               },
                             ),
                             /*DropdownButton<String>(
@@ -245,14 +261,14 @@ class _MapsPageState extends State<MapsPage> {
                             ToggleSwitch(
                               initialLabelIndex: 0,
                               totalSwitches: 2,
-                              labels: ['µSv/h', 'nSv/h'],
+                              labels: const ['µSv/h', 'nSv/h'],
                               onToggle: (index) {
                                 if (index == 0) {
                                   _selectedunit1m = 'µSv/h';
                                 } else {
                                   _selectedunit1m = 'nSv/h';
                                 }
-                                print('unit1m to: $_selectedunit1m');
+                                debugPrint('unit1m to: $_selectedunit1m');
                               },
                             ),
 
@@ -292,6 +308,22 @@ class _MapsPageState extends State<MapsPage> {
                               },
                               onSaved: (value) => MAP.note = value!,
                             ),
+
+                            ElevatedButton(
+                                onPressed: _getImage,
+                                child: const Text(
+                                  'เพิ่มรูปภาพ',
+                                  style: TextStyle(fontSize: 18),
+                                )),
+
+                            if (_pickedImage != null)
+                              SizedBox(
+                                height: 200,
+                                child: Image.file(File(_pickedImage!.path)),
+                              ),
+                            SizedBox(
+                                child: Text(
+                                    _pickedImageName ?? 'No image selected')),
 
                             const SizedBox(height: 20),
                             ElevatedButton(

@@ -7,6 +7,7 @@ import 'package:flutter_application_1/Pages/saveuser.dart';
 import 'package:flutter_application_1/Pages/saveworksite.dart';
 import 'package:flutter_application_1/Pages/newuserpage.dart';
 import 'package:flutter_application_1/Pages/savedetector.dart';
+import 'package:flutter_application_1/Pages/Image.dart';
 import 'Provider/Transaction_provider.dart';
 
 void main() async {
@@ -180,7 +181,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: 200,
                         height: 50,
                         child: ElevatedButton(
-                            onPressed: () async {},
+                            onPressed: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Imagepage(), //เปลี่ยนหน้าdetectorตรงนี้จ้า
+                                  ));
+                            },
                             child: const Text(
                               'คู่มือใช้งานแอป',
                               style: TextStyle(fontSize: 18),
