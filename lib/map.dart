@@ -7,7 +7,8 @@ import 'package:url_launcher/url_launcher_string.dart'; //ใช้ลิ้ง�
 import 'package:flutter_application_1/Pages/allvariable.dart';
 import 'package:toggle_switch/toggle_switch.dart'; //ปุ่มแบบtoggle
 import 'package:image_picker/image_picker.dart'; //อัพรูปภาพ
-import 'dart:io';
+import 'dart:io'; //ใช้ fileได้
+import 'package:firebase_storage/firebase_storage.dart'; //อัพรรูป
 
 class MapsPage extends StatefulWidget {
   const MapsPage({super.key});
@@ -328,7 +329,8 @@ class _MapsPageState extends State<MapsPage> {
                             const SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (_formKey.currentState!.validate() &&
+                                    _pickedImage?.path != null) {
                                   _formKey.currentState!.save();
                                   final DocumentSnapshot<Map<String, dynamic>>
                                       snapshot = await getDetectorName();
@@ -360,7 +362,26 @@ class _MapsPageState extends State<MapsPage> {
                                     'long': userlocation.longitude,
                                     'note': MAP.note,
                                     'time': Timestamp.now(),
+                                    //'pic': File(_pickedImage),
                                   });
+
+                                  final storageRef = FirebaseStorage.instance
+                                      .ref()
+                                      .child('image');
+                                  try {
+                                    final UploadTask uploadTask = storageRef
+                                        .putFile(File(_pickedImage!.path));
+                                    await uploadTask;
+                                    final String downloadUrl =
+                                        await storageRef.getDownloadURL();
+                                    debugPrint(
+                                        'Upload successful! Download URL: $downloadUrl');
+                                    debugPrint('ส่งรูปแล้ว');
+                                  } catch (e) {
+                                    debugPrint('ส่งรูปไม่ได้');
+                                    debugPrint(_pickedImage!.path);
+                                  }
+//gs://nuclear-app-cf4ef.appspot.com/image
                                   _formKey.currentState!.reset();
 
                                   ScaffoldMessenger.of(context)
