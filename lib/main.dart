@@ -70,27 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('ยินดีต้อนรับ', style: TextStyle(fontSize: 20)),
-                    /*Padding(
-                  padding: EdgeInsets.all(30),
-                  child: SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    MapsPage(), //แก้new project
-                              ));
-                        },
-                        child: const Text(
-                          'New Project',
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  ),
-                ),*/
-
                     SizedBox(
                         width: 200,
                         height: 50,
@@ -201,3 +180,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 }
+/*  
+อันนี้คือขออนุญาต แต่ไม่รุ้จะใส่ตรงไหน
+if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE);
+}
+
+*/

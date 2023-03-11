@@ -367,7 +367,8 @@ class _MapsPageState extends State<MapsPage> {
 
                                   final storageRef = FirebaseStorage.instance
                                       .ref()
-                                      .child('image');
+                                      .child('image/${_pickedImageName}');
+
                                   try {
                                     final UploadTask uploadTask = storageRef
                                         .putFile(File(_pickedImage!.path));
