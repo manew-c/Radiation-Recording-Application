@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             title: const Text("Radiation Recording"),
-            actions: [const Icon(Icons.album_outlined)],
+            actions: const [Icon(Icons.album_outlined)],
           ),
           body: Padding(
             padding: const EdgeInsets.all(30.0),

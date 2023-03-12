@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Pages/informationPage.dart';
 import '../map.dart';
+import 'package:flutter_application_1/Pages/map2.dart';
 import 'package:flutter_application_1/Pages/allvariable.dart';
 
 class newuserpage extends StatefulWidget {
@@ -316,7 +317,7 @@ class _newuserpageState extends State<newuserpage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const MapsPage(),
+                          builder: (context) => const Maps2Page(),
                         ),
                       ); //navigator
 

@@ -54,3 +54,18 @@ class _startclass {
 
 _startclass start = _startclass(
     selectedusername: '', selecteddetector: '', selectedworksite: '');
+
+class _userlocationclass {
+  var lat;
+  var long;
+
+  _userlocationclass({
+    required this.lat,
+    required this.long,
+  });
+}
+
+_userlocationclass userloca = _userlocationclass(
+  lat: 0,
+  long: 0,
+);
