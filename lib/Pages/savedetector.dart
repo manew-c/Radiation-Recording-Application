@@ -14,12 +14,24 @@ class _savedetectorPageState extends State<savedetectorPage> {
   final _formKey = GlobalKey<FormState>();
   final SERIES = TextEditingController();
   String? savedetectorname;
-  String? savedetectortype;
+  String? savedetectortype = 'Gas-filled';
   double? saveconvertionfactor;
   String? savenote;
+  final _setdetector = <String>{};
+  Future<void> fetchDatadetector() async {
+    await FirebaseFirestore.instance
+        .collection("หัววัดall")
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
+        _setdetector.add(result.id);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    fetchDatadetector();
     return Scaffold(
         appBar: AppBar(
           title: const Text('บันทึกข้อมูลหัววัดรังสี'),
@@ -38,25 +50,34 @@ class _savedetectorPageState extends State<savedetectorPage> {
                       validator: (value1) {
                         if (value1!.isEmpty) {
                           return 'Please enter your หัววัด';
+                        } else if (_setdetector.contains(value1) == true) {
+                          debugPrint('มีหัววัดนี้แล้ว' + value1);
+                          return 'มีหัววัดนี้แล้ว';
                         }
                         return null;
                       },
                       onSaved: (value1) => savedetectorname = value1!,
                       //controller: SERIES,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     //ประเภทหัววัด
-                    SizedBox(
+                    const SizedBox(
                       child: Text(
                         'เลือกชนิดหัววัด',
                         textAlign: TextAlign.left,
                       ),
                     ),
                     ToggleSwitch(
-                      customWidths: [90.0, 100.0, 120.0],
+                      //customWidths: const [120.0, 120.0, 120.0],
+                      minWidth: 150.0,
                       initialLabelIndex: 0,
+                      isVertical: true,
                       totalSwitches: 3,
-                      labels: ['Gas-filled', 'Scintillation', 'Semiconductor'],
+                      labels: const [
+                        'Gas-filled',
+                        'Scintillation',
+                        'Semiconductor'
+                      ],
                       onToggle: (index) {
                         if (index == 0) {
                           savedetectortype = 'Gas-filled';
@@ -65,10 +86,10 @@ class _savedetectorPageState extends State<savedetectorPage> {
                         } else if (index == 2) {
                           savedetectortype = 'Semiconductor';
                         }
-                        print('detector to: $savedetectortype');
+                        debugPrint('detector to: $savedetectortype');
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     /*TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
@@ -90,7 +111,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                           icon: Icon(Icons.key)),
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return 'Please enter conversion factor';
+                          return 'หากไม่มีโปรดใส่ค่าเท่ากับ 1';
                         } else if (isFloat(value) == false) {
                           return 'ค่าที่กรอกไม่ใช่ตัวเลข';
                         }
@@ -103,7 +124,9 @@ class _savedetectorPageState extends State<savedetectorPage> {
                     TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
-                          labelText: 'รายละเอียดอื่นๆ', icon: Icon(Icons.key)),
+                          labelText: 'รายละเอียดอื่นๆ',
+                          icon: Icon(Icons.key),
+                          hintText: 'เช่น รหัสเครื่อง ชื่อรุ่น เป็นต้น'),
                       validator: (value3) {
                         if (value3!.isEmpty) {
                           return 'หากไม่มีโปรดใส่เครื่องหมาย - ';
@@ -128,7 +151,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                                     .showSnackBar(SnackBar(
                                   content: Text(
                                       'บันทึกหัววัด  $savedetectorname  เรียบร้อย'),
-                                  duration: const Duration(seconds: 10),
+                                  duration: const Duration(seconds: 5),
                                 ));
 
                                 FirebaseFirestore.instance

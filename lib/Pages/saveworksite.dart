@@ -14,6 +14,18 @@ class _saveworksitePageState extends State<saveworksitePage> {
   String? saveworksite;
   String? saveprovince = '';
   String? savenote;
+  final _setworksite = <String>{};
+  Future<void> fetchDataworksite() async {
+    await FirebaseFirestore.instance
+        .collection("allworksite")
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
+        _setworksite.add(result.id);
+      }
+    });
+  }
+
   final _listprovince = <String>[
     'กรุงเทพมหานคร',
     'กระบี่',
@@ -96,6 +108,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
 
   @override
   Widget build(BuildContext context) {
+    fetchDataworksite();
     return Scaffold(
         appBar: AppBar(
           title: const Text('บันทึกข้อมูลไซต์งาน'),
@@ -114,6 +127,8 @@ class _saveworksitePageState extends State<saveworksitePage> {
                       validator: (value1) {
                         if (value1!.isEmpty) {
                           return 'Please enter your ไซต์งาน';
+                        } else if (_setworksite.contains(value1) == true) {
+                          return 'มีชื่อไซต์งานนี้แล้ว';
                         }
                         return null;
                       },
@@ -168,7 +183,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                         const SizedBox(width: 20),
                         const SizedBox(child: Text('จังหวัด')),
                         SizedBox(
-                            width: 200, // set a fixed width
+                            width: 200, // set a fixed width กุงง
                             child: Autocomplete<String>(
                               optionsBuilder:
                                   (TextEditingValue textEditingValue) {
@@ -209,14 +224,21 @@ class _saveworksitePageState extends State<saveworksitePage> {
                     TextFormField(
                       textAlign: TextAlign.center,
                       decoration: const InputDecoration(
-                          labelText: 'รายละเอียดอื่นๆ', icon: Icon(Icons.key)),
+                          labelText: 'รายละเอียดอื่นๆ',
+                          icon: Icon(Icons.key),
+                          hintText: 'เช่น อำเภอ เขต เป็นต้น'),
                       validator: (value3) {
                         if (value3!.isEmpty) {
-                          return 'หากไม่มีโปรดใส่เครื่องหมาย - ';
+                          return null;
                         }
                         return null;
                       },
-                      onSaved: (value3) => savenote = value3!,
+                      onSaved: (value3) => {
+                        if (value3!.isNotEmpty == true)
+                          {savenote = value3}
+                        else
+                          {savenote = 'ไม่ได้กรอกรายละเอียดอื่นๆ'}
+                      },
                       //autofocus: true,
                       //controller: SERIES,
                     ),
@@ -234,8 +256,8 @@ class _saveworksitePageState extends State<saveworksitePage> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text(
-                                      'บันทึกไซต์งาน  $saveworksite จังหวัด$saveprovince  และรายละเอียด เรียบร้อย'),
-                                  duration: const Duration(seconds: 10),
+                                      'บันทึกไซต์งาน  $saveworksite จังหวัด$saveprovince เรียบร้อย'),
+                                  duration: const Duration(seconds: 5),
                                 ));
 
                                 FirebaseFirestore.instance
@@ -250,7 +272,7 @@ class _saveworksitePageState extends State<saveworksitePage> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text('กรุณาเลือกจังหวัด'),
-                                  duration: const Duration(seconds: 10),
+                                  duration: const Duration(seconds: 5),
                                 ));
                               }
                             }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา

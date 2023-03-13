@@ -7,7 +7,6 @@ import 'package:flutter_application_1/Pages/saveuser.dart';
 import 'package:flutter_application_1/Pages/saveworksite.dart';
 import 'package:flutter_application_1/Pages/newuserpage.dart';
 import 'package:flutter_application_1/Pages/savedetector.dart';
-import 'package:flutter_application_1/Pages/Image.dart';
 import 'Provider/Transaction_provider.dart';
 
 void main() async {
@@ -59,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             title: const Text("Radiation Recording"),
-            actions: const [Icon(Icons.album_outlined)],
+            //actions: const [Icon(Icons.album_outlined)],
           ),
           body: Padding(
             padding: const EdgeInsets.all(30.0),
@@ -160,14 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         width: 200,
                         height: 50,
                         child: ElevatedButton(
-                            onPressed: () async {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const Imagepage(), //เปลี่ยนหน้าdetectorตรงนี้จ้า
-                                  ));
-                            },
+                            onPressed: () async {},
                             child: const Text(
                               'คู่มือใช้งานแอป',
                               style: TextStyle(fontSize: 18),

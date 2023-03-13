@@ -12,9 +12,21 @@ class _saveuserPageState extends State<saveuserPage> {
   final _formKey = GlobalKey<FormState>();
   final SERIES = TextEditingController();
   String? saveusername;
+  final _setusername = <String>{};
+  Future<void> fetchDatausername() async {
+    await FirebaseFirestore.instance
+        .collection("ชื่อคนall")
+        .get()
+        .then((querySnapshot) {
+      for (var result in querySnapshot.docs) {
+        _setusername.add(result.id);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    fetchDatausername();
     return Scaffold(
         appBar: AppBar(
           title: const Text('บันทึกข้อมูลผู้ใช้งาน'),
@@ -33,11 +45,12 @@ class _saveuserPageState extends State<saveuserPage> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Please enter your ชื่อผู้ใช้';
+                        } else if (_setusername.contains(value) == true) {
+                          return 'มีชื่อนี้แล้ว';
                         }
                         return null;
                       },
                       onSaved: (value) => saveusername = value!,
-                      autofocus: true,
                       controller: SERIES,
                     ),
                     Padding(
@@ -54,7 +67,7 @@ class _saveuserPageState extends State<saveuserPage> {
                                     .showSnackBar(SnackBar(
                                   content: Text(
                                       'บันทึกชื่อผู้ใช้  ${saveusername}  เรียบร้อย'),
-                                  duration: const Duration(seconds: 10),
+                                  duration: const Duration(seconds: 5),
                                 ));
 
                                 FirebaseFirestore.instance

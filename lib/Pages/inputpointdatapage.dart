@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; //ใช้แปะtimestamp
 import 'package:string_validator/string_validator.dart'; //เป็นเครื่องเช็ค
@@ -9,7 +8,6 @@ import 'package:toggle_switch/toggle_switch.dart'; //ปุ่มแบบtoggle
 import 'package:image_picker/image_picker.dart'; //อัพรูปภาพ
 import 'dart:io'; //ใช้ fileได้
 import 'package:firebase_storage/firebase_storage.dart'; //อัพรรูป
-import 'package:flutter_application_1/Pages/map2.dart';
 
 class inputpointpage extends StatefulWidget {
   const inputpointpage({super.key});
@@ -77,7 +75,7 @@ class _inputpointPageState extends State<inputpointpage> {
                 children: <Widget>[
                   Text(
                     'Your location!\nlat: ${userloca.lat} long: ${userloca.long}  ',
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                     textAlign: TextAlign.left,
                   ),
                   /*Text(
@@ -108,8 +106,9 @@ class _inputpointPageState extends State<inputpointpage> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
+                      //อันนี้ไม่ใส่ค่าก็ได้
                       if (value == '') {
-                        return 'โปรดใส่ค่า Doseที่ 5 cm';
+                        return null;
                       } else if (isFloat(value!) == false) {
                         return 'ค่าที่กรอกไม่ใช่ตัวเลข';
                       }
@@ -118,6 +117,8 @@ class _inputpointPageState extends State<inputpointpage> {
                     onSaved: (value) {
                       if (value!.isNotEmpty == true) {
                         MAP.dose5cm = double.parse(value);
+                      } else {
+                        MAP.dose5cm = 0;
                       }
                     },
                   ),
@@ -177,11 +178,17 @@ class _inputpointPageState extends State<inputpointpage> {
                     ),
                     validator: (value) {
                       if (value! == '') {
-                        return 'หากไม่มีกรุณากรอก - ';
+                        return null;
                       }
                       return null;
                     },
-                    onSaved: (value) => MAP.note = value!,
+                    onSaved: (value) {
+                      if (value!.isNotEmpty == true) {
+                        MAP.note = value;
+                      } else {
+                        MAP.note = 'ไม่ได้กรอกหมายเหตุ';
+                      }
+                    },
                   ),
 
                   const SizedBox(height: 10),
@@ -218,8 +225,8 @@ class _inputpointPageState extends State<inputpointpage> {
                           snapshot.hasData) {
                         return Image(
                           image: FileImage(snapshot.data!),
-                          height: 250,
-                          width: 190,
+                          fit: BoxFit.contain,
+                          height: 200,
                         );
                       } else {
                         return const Center(child: Text('ยังไม่ได้ถ่ายรูปภาพ'));
@@ -289,7 +296,7 @@ class _inputpointPageState extends State<inputpointpage> {
                         ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
                           content: Text(
                               'บันทึกจุด${MAP.pointname}เรียบร้อย  Doseที่5cm ${MAP.dose5cm}  Doseที่1m ${MAP.dose1m}'),
-                          duration: const Duration(seconds: 10),
+                          duration: const Duration(seconds: 5),
                         ));
                       } else if (_formKey.currentState!.validate() &&
                           _pickedImage?.path == null) {
@@ -320,14 +327,14 @@ class _inputpointPageState extends State<inputpointpage> {
                           'long': userloca.long,
                           'note': MAP.note,
                           'time': Timestamp.now(),
-                          'picpath': null,
+                          'picpath': 'ไม่ได้ถ่ายรูป',
                         });
                         _formKey.currentState!.reset();
 
                         ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
                           content: Text(
                               'บันทึกจุด${MAP.pointname}เรียบร้อย  Doseที่5cm ${MAP.dose5cm}  Doseที่1m ${MAP.dose1m}'),
-                          duration: const Duration(seconds: 10),
+                          duration: const Duration(seconds: 5),
                         ));
                       }
                     },
