@@ -87,6 +87,7 @@ class COUTERS {
   COUTERS._(); // private constructor
   var _counter = 1;
   int get counter => _counter;
+  set counter(int value) => _counter = value;
 
   void incrementCounter() {
     _counter++;

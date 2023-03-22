@@ -117,10 +117,10 @@ class _Maps2PageState extends State<Maps2Page> {
               userloca.lat = userlocation.latitude;
               userloca.long = userlocation.longitude;
               debugPrint('lat =' + userlocation.latitude.toString());
-              ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
+              /*ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
                 content: Text('lat =' + userlocation.latitude.toString()),
                 duration: const Duration(seconds: 5),
-              ));
+              ));*/
               Navigator.push(
                   context,
                   MaterialPageRoute(

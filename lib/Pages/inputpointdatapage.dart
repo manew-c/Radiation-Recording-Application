@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart'; //อัพรูปภาพ
 import 'dart:io'; //ใช้ fileได้
 import 'package:firebase_storage/firebase_storage.dart'; //อัพรรูป
 import 'package:flutter_application_1/main.dart';
+import 'dart:math' as math;
 
 class inputpointpage extends StatefulWidget {
   const inputpointpage({super.key});
@@ -61,20 +62,23 @@ class _inputpointPageState extends State<inputpointpage> {
     }
   }
 
-  Object findLatestNumber(s) {
+  findLatestandMaxNumber(s) {
     List sx = s.toList();
-    try {
-      int x = -1;
+    List<int> a = [];
+    if (sx.isNotEmpty) {
       for (var i in sx) {
-        if (i is num || isFloat(i)) {
-          x = i;
+        if (i is int) {
+          a.add(i);
+        } else if (isFloat(i)) {
+          a.add(int.parse(i));
         }
       }
-      debugPrint('อยู่ในtry' + x.toString());
-      return x;
-    } catch (e) {
-      debugPrint('อยู่ในcatch' + sx.toString());
-      return 'ยังไม่มีชื่อจุดตัวเลข';
+      int maxNumber = (a.reduce(math.max));
+      debugPrint(maxNumber.toString());
+      return maxNumber;
+    } else {
+      debugPrint('ไม่เจอเซ็ตเซ็ตว่าง');
+      return 0; //Stream.value(0);
     }
   }
 
@@ -97,9 +101,17 @@ class _inputpointPageState extends State<inputpointpage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     fetchDatapointname();
-    findLatestNumber(_setpointname);
+    debugPrint('เซ็ตชื่่อจุด1' +
+        _setpointname.toString()); // call fetchDatapointname function here
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //fetchDatapointname();
+    //debugPrint('เซ็ตชื่่อจุด1' + _setpointname.toString());
     return Scaffold(
       appBar: AppBar(
         title: Flexible(
@@ -145,7 +157,12 @@ class _inputpointPageState extends State<inputpointpage> {
                         return 'Please enter ชื่อจุด';
                       }
                       if (_setpointname.contains(value) == true) {
-                        return 'มีชื่อจุดนี้แล้ว';
+                        fetchDatapointname();
+                        debugPrint('fecthในvalidator');
+                        String x =
+                            findLatestandMaxNumber(_setpointname).toString();
+
+                        return 'มีชื่อจุดนี้แล้ว จุดล่าสุดคือ' + x;
                       }
                       return null;
                     },
@@ -155,15 +172,47 @@ class _inputpointPageState extends State<inputpointpage> {
                   ),
 
                   const SizedBox(height: 10),
-                  Text(
+                  /*Text(
                     'หากกรอกชื่อจุดซ้ำจะเป็นการเขียนข้อมูลทับอันเก่า',
                     style: TextStyle(
                       color: Colors.red,
                     ),
-                  ),
+                  ),*/
 
-                  Text('ชื่อจุดที่กรอกเรียงจากเก่าไปใหม่3จุด' +
-                      MyData().listoldpoint.toString()),
+                  /*Text('ชื่อจุดที่กรอกเรียงจากเก่าไปใหม่' +
+                      _setpointname.toString()),*/
+                  /* ElevatedButton(
+                    onPressed: () {
+                      fetchDatapointname();
+                    },
+                    child: const Text('ดูค่าที่กรอก'),
+                  ),*/
+                  /*FutureBuilder(
+                    future: findLatestandMaxNumber(_setpointname),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Text('จุดล่าสุด' + snapshot.data.toString());
+                      }
+                    },
+                  ),*/
+                  /*StreamBuilder<int>(
+                    stream: findLatestandMaxNumber(_setpointname),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<int> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        return Text('จุดล่าสุด' + snapshot.data.toString());
+                      }
+                    },
+                  ),*/
+
                   const SizedBox(height: 10),
 
                   TextFormField(
@@ -304,8 +353,8 @@ class _inputpointPageState extends State<inputpointpage> {
                   ElevatedButton(
                     onPressed: () async {
                       fetchDatapointname();
-                      debugPrint('เซ็ตชื่่อจุด' + _setpointname.toString());
-                      findLatestNumber(_setpointname);
+                      debugPrint('เซ็ตชื่่อจุด2' + _setpointname.toString());
+                      //findLatestandMaxNumber(_setpointname);
 
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
@@ -390,6 +439,7 @@ class _inputpointPageState extends State<inputpointpage> {
 
                         setState(() {
                           if (isFloat(MAP.pointname) == true) {
+                            COUTERS().counter = int.parse(MAP.pointname);
                             COUTERS().incrementCounter();
                           }
                         }); //ชื่อจุดบวก1เรื่อยๆ
