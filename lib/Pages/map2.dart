@@ -60,6 +60,10 @@ class _Maps2PageState extends State<Maps2Page> {
     return userlocation;
   }
 
+  Future<void> _updatelocation() async {
+    userlocation = await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,10 +110,17 @@ class _Maps2PageState extends State<Maps2Page> {
         children: [
           FloatingActionButton.extended(
             onPressed: () {
+              _updatelocation();
               mapController.animateCamera(CameraUpdate.newLatLngZoom(
                   LatLng(userlocation.latitude, userlocation.longitude), 18));
+
               userloca.lat = userlocation.latitude;
               userloca.long = userlocation.longitude;
+              debugPrint('lat =' + userlocation.latitude.toString());
+              ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
+                content: Text('lat =' + userlocation.latitude.toString()),
+                duration: const Duration(seconds: 5),
+              ));
               Navigator.push(
                   context,
                   MaterialPageRoute(

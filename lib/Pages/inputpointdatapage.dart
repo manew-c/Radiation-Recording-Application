@@ -8,6 +8,7 @@ import 'package:toggle_switch/toggle_switch.dart'; //ปุ่มแบบtoggle
 import 'package:image_picker/image_picker.dart'; //อัพรูปภาพ
 import 'dart:io'; //ใช้ fileได้
 import 'package:firebase_storage/firebase_storage.dart'; //อัพรรูป
+import 'package:flutter_application_1/main.dart';
 
 class inputpointpage extends StatefulWidget {
   const inputpointpage({super.key});
@@ -38,6 +39,52 @@ class _inputpointPageState extends State<inputpointpage> {
     }
   }
 
+  final _setpointname = <String>{};
+  Future<void> fetchDatapointname() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('ไซต์งาน')
+          .doc(start.selectedworksite)
+          .collection('ผู้วัดรังสี')
+          .doc(start.selectedusername)
+          .collection('หัววัด')
+          .doc(start.selecteddetector)
+          .collection('ชื่อจุด')
+          .get()
+          .then((querySnapshot) {
+        for (var result in querySnapshot.docs) {
+          _setpointname.add(result.id);
+        }
+      });
+    } catch (e) {
+      debugPrint('หาชื่อจุดไม่ได้');
+    }
+  }
+
+  Object findLatestNumber(s) {
+    List sx = s.toList();
+    try {
+      int x = -1;
+      for (var i in sx) {
+        if (i is num || isFloat(i)) {
+          x = i;
+        }
+      }
+      debugPrint('อยู่ในtry' + x.toString());
+      return x;
+    } catch (e) {
+      debugPrint('อยู่ในcatch' + sx.toString());
+      return 'ยังไม่มีชื่อจุดตัวเลข';
+    }
+  }
+
+  void updateoldpoint(x) {
+    MyData().listoldpoint.add(x);
+    if (MyData().listoldpoint.length > 3) {
+      MyData().listoldpoint.removeAt(0);
+    }
+  }
+
   DocumentReference<Map<String, dynamic>> detectordatabase = FirebaseFirestore
       .instance
       .collection('หัววัดall')
@@ -51,6 +98,8 @@ class _inputpointPageState extends State<inputpointpage> {
 
   @override
   Widget build(BuildContext context) {
+    fetchDatapointname();
+    findLatestNumber(_setpointname);
     return Scaffold(
       appBar: AppBar(
         title: Flexible(
@@ -83,20 +132,38 @@ class _inputpointPageState extends State<inputpointpage> {
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.left,
                   ),*/
+                  const SizedBox(height: 20),
                   TextFormField(
                     decoration: const InputDecoration(
                       hintText: 'กรอกชื่อจุด',
                       labelText: 'ชื่อจุด',
                       border: OutlineInputBorder(),
                     ),
+                    initialValue: COUTERS().counter.toString(),
                     validator: (value) {
                       if (value! == '') {
                         return 'Please enter ชื่อจุด';
                       }
+                      if (_setpointname.contains(value) == true) {
+                        return 'มีชื่อจุดนี้แล้ว';
+                      }
                       return null;
                     },
-                    onSaved: (value) => MAP.pointname = (value!),
+                    onSaved: (value) {
+                      MAP.pointname = (value!);
+                    },
                   ),
+
+                  const SizedBox(height: 10),
+                  Text(
+                    'หากกรอกชื่อจุดซ้ำจะเป็นการเขียนข้อมูลทับอันเก่า',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+
+                  Text('ชื่อจุดที่กรอกเรียงจากเก่าไปใหม่3จุด' +
+                      MyData().listoldpoint.toString()),
                   const SizedBox(height: 10),
 
                   TextFormField(
@@ -233,16 +300,14 @@ class _inputpointPageState extends State<inputpointpage> {
                       }
                     },
                   ),
-
-                  /*SizedBox(
-                                                child: Text(
-                                                    _pickedImageName ?? 'No image selected')),*/
-
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
-                      if (_formKey.currentState!.validate() &&
-                          _pickedImage?.path != null) {
+                      fetchDatapointname();
+                      debugPrint('เซ็ตชื่่อจุด' + _setpointname.toString());
+                      findLatestNumber(_setpointname);
+
+                      if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         final DocumentSnapshot<Map<String, dynamic>> snapshot =
                             await getDetectorName();
@@ -251,92 +316,90 @@ class _inputpointPageState extends State<inputpointpage> {
                             dato!['conversionfactor'].toDouble();
                         CollectionReference siteandprovind =
                             FirebaseFirestore.instance.collection('ไซต์งาน');
-                        siteandprovind
-                            .doc(start.selectedworksite)
-                            .collection('ผู้วัดรังสี')
-                            .doc(start.selectedusername)
-                            .collection('หัววัด')
-                            .doc(start.selecteddetector)
-                            .collection('ชื่อจุด')
-                            .doc(MAP.pointname)
-                            .set({
-                          'dose1m': MAP.dose1m,
-                          'conversion_dose1m': MAP.dose1m * conversion,
-                          'doseunit1m': _selectedunit1m,
-                          'dose5cm': MAP.dose5cm * conversion,
-                          'conversion_dose5cm': MAP.dose5cm * conversion,
-                          'doseunit5cm': _selectedunit5cm,
-                          'lat': userloca.lat,
-                          'long': userloca.long,
-                          'note': MAP.note,
-                          'time': Timestamp.now(),
-                          'picpath':
-                              'gs://nuclear-app-cf4ef.appspot.com/image/$_pickedImageName',
-                        }); //gs://nuclear-app-cf4ef.appspot.com/image/511193c3-7dd0-42ca-879f-85e354dbe4802863001179732899831.jpg
+                        if (_pickedImage?.path != null) {
+                          siteandprovind
+                              .doc(start.selectedworksite)
+                              .collection('ผู้วัดรังสี')
+                              .doc(start.selectedusername)
+                              .collection('หัววัด')
+                              .doc(start.selecteddetector)
+                              .collection('ชื่อจุด')
+                              .doc(MAP.pointname)
+                              .set({
+                            'dose1m': MAP.dose1m,
+                            'conversion_dose1m': MAP.dose1m * conversion,
+                            'doseunit1m': _selectedunit1m,
+                            'dose5cm': MAP.dose5cm * conversion,
+                            'conversion_dose5cm': MAP.dose5cm * conversion,
+                            'doseunit5cm': _selectedunit5cm,
+                            'lat': userloca.lat,
+                            'long': userloca.long,
+                            'note': MAP.note,
+                            'time': Timestamp.now(),
+                            'picpath':
+                                'gs://nuclear-app-cf4ef.appspot.com/image/$_pickedImageName',
+                          }); //gs://nuclear-app-cf4ef.appspot.com/image/511193c3-7dd0-42ca-879f-85e354dbe4802863001179732899831.jpg
 
-                        final storageRef = FirebaseStorage.instance
-                            .ref()
-                            .child('image/$_pickedImageName');
+                          final storageRef = FirebaseStorage.instance
+                              .ref()
+                              .child('image/$_pickedImageName');
 
-                        try {
-                          final UploadTask uploadTask =
-                              storageRef.putFile(File(_pickedImage!.path));
-                          await uploadTask;
-                          final String downloadUrl =
-                              await storageRef.getDownloadURL();
-                          debugPrint(
-                              'Upload successful! Download URL: $downloadUrl');
-                          debugPrint('ส่งรูปแล้ว');
-                        } catch (e) {
-                          debugPrint('ส่งรูปไม่ได้');
-                          debugPrint(_pickedImage!.path);
-                        } //อันนี้ของtry
+                          try {
+                            final UploadTask uploadTask =
+                                storageRef.putFile(File(_pickedImage!.path));
+                            await uploadTask;
+                            final String downloadUrl =
+                                await storageRef.getDownloadURL();
+                            debugPrint(
+                                'Upload successful! Download URL: $downloadUrl');
+                            debugPrint('ส่งรูปแล้ว');
+                          } catch (e) {
+                            debugPrint('ส่งรูปไม่ได้');
+                            debugPrint(_pickedImage!.path);
+                          }
+                        } //ifอันเล็ก
+                        //ข้างล่างไม่มีรูป
+                        else if (_pickedImage?.path == null) {
+                          siteandprovind
+                              .doc(start.selectedworksite)
+                              .collection('ผู้วัดรังสี')
+                              .doc(start.selectedusername)
+                              .collection('หัววัด')
+                              .doc(start.selecteddetector)
+                              .collection('ชื่อจุด')
+                              .doc(MAP.pointname)
+                              .set({
+                            'dose1m': MAP.dose1m,
+                            'conversion_dose1m': MAP.dose1m * conversion,
+                            'doseunit1m': _selectedunit1m,
+                            'dose5cm': MAP.dose5cm * conversion,
+                            'conversion_dose5cm': MAP.dose5cm * conversion,
+                            'doseunit5cm': _selectedunit5cm,
+                            'lat': userloca.lat,
+                            'long': userloca.long,
+                            'note': MAP.note,
+                            'time': Timestamp.now(),
+                            'picpath': 'ไม่ได้ถ่ายรูป',
+                          });
+                        } //จบ if อันที่2 ข้างล่างคือifใหญ่
+                        updateoldpoint(MAP.pointname); //แสดงชื่อจุดที่เคยกรอก
+                        debugPrint(
+                            'ชื่อจุด' + MyData().listoldpoint.toString());
+
                         _formKey.currentState!.reset();
+
+                        setState(() {
+                          if (isFloat(MAP.pointname) == true) {
+                            COUTERS().incrementCounter();
+                          }
+                        }); //ชื่อจุดบวก1เรื่อยๆ
 
                         ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
                           content: Text(
                               'บันทึกจุด${MAP.pointname}เรียบร้อย  Doseที่5cm ${MAP.dose5cm}  Doseที่1m ${MAP.dose1m}'),
                           duration: const Duration(seconds: 5),
                         ));
-                      } else if (_formKey.currentState!.validate() &&
-                          _pickedImage?.path == null) {
-                        _formKey.currentState!.save();
-                        final DocumentSnapshot<Map<String, dynamic>> snapshot =
-                            await getDetectorName();
-                        final Map<String, dynamic>? dato = snapshot.data();
-                        final double conversion =
-                            dato!['conversionfactor'].toDouble();
-                        CollectionReference siteandprovind =
-                            FirebaseFirestore.instance.collection('ไซต์งาน');
-                        siteandprovind
-                            .doc(start.selectedworksite)
-                            .collection('ผู้วัดรังสี')
-                            .doc(start.selectedusername)
-                            .collection('หัววัด')
-                            .doc(start.selecteddetector)
-                            .collection('ชื่อจุด')
-                            .doc(MAP.pointname)
-                            .set({
-                          'dose1m': MAP.dose1m,
-                          'conversion_dose1m': MAP.dose1m * conversion,
-                          'doseunit1m': _selectedunit1m,
-                          'dose5cm': MAP.dose5cm * conversion,
-                          'conversion_dose5cm': MAP.dose5cm * conversion,
-                          'doseunit5cm': _selectedunit5cm,
-                          'lat': userloca.lat,
-                          'long': userloca.long,
-                          'note': MAP.note,
-                          'time': Timestamp.now(),
-                          'picpath': 'ไม่ได้ถ่ายรูป',
-                        });
-                        _formKey.currentState!.reset();
-
-                        ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
-                          content: Text(
-                              'บันทึกจุด${MAP.pointname}เรียบร้อย  Doseที่5cm ${MAP.dose5cm}  Doseที่1m ${MAP.dose1m}'),
-                          duration: const Duration(seconds: 5),
-                        ));
-                      }
+                      } //นี้คือจบifอันใหญ่สุด
                     },
                     child: const Center(child: Text("Submit")),
                   ),
@@ -354,16 +417,18 @@ class _inputpointPageState extends State<inputpointpage> {
                         },
                         child: const Text('กดดูcontour map'),
                       ),
-                      const SizedBox(width: 10),
-                      /*ElevatedButton(
-                        child: const Text(
-                          "Close",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
+                      const SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const MyHomePage(), //เปลี่ยนหน้autoตรงนนี้จ้า
+                              ));
                         },
-                      ),*/
+                        child: const Text('ไปหน้าแรก'),
+                      ),
                     ],
                   ),
                 ],

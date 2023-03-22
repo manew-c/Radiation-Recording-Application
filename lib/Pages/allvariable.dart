@@ -58,7 +58,6 @@ _startclass start = _startclass(
 class _userlocationclass {
   var lat;
   var long;
-
   _userlocationclass({
     required this.lat,
     required this.long,
@@ -69,3 +68,27 @@ _userlocationclass userloca = _userlocationclass(
   lat: 0,
   long: 0,
 );
+
+class MyData {
+  static final MyData _instance = MyData._(); // private constructor
+
+  factory MyData() => _instance;
+
+  MyData._(); // private constructor
+  final _listoldpoint = <String>[];
+  List<String> get listoldpoint => _listoldpoint;
+}
+
+class COUTERS {
+  static final COUTERS _instance = COUTERS._(); // private constructor
+
+  factory COUTERS() => _instance;
+
+  COUTERS._(); // private constructor
+  var _counter = 1;
+  int get counter => _counter;
+
+  void incrementCounter() {
+    _counter++;
+  }
+}
