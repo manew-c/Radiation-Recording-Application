@@ -270,9 +270,9 @@ class _saveworksitePageState extends State<saveworksitePage> {
                                 _formKey.currentState!.reset();
                               } else if (saveprovince == '') {
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
+                                    .showSnackBar(const SnackBar(
                                   content: Text('กรุณาเลือกจังหวัด'),
-                                  duration: const Duration(seconds: 5),
+                                  duration: Duration(seconds: 5),
                                 ));
                               }
                             }, //อย่าลืมเปลี่ยนpageกลับมาเหมือนเดิมนาจาาา

@@ -1,5 +1,3 @@
-import 'package:flutter_application_1/Pages/allvariable.dart';
-
 class _pointclass {
   String worksite;
   String worksitenote;

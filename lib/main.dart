@@ -69,23 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('ยินดีต้อนรับ', style: TextStyle(fontSize: 20)),
-                    SizedBox(
-                        width: 200,
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const newuserpage(), //เปลี่ยนหน้autoตรงนนี้จ้า
-                                  ));
-                            },
-                            child: const Text(
-                              'start',
-                              style: TextStyle(fontSize: 18),
-                            ))),
-                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                    const SizedBox(height: 30),
                     SizedBox(
                         width: 200,
                         height: 50,
@@ -101,8 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: const Text(
                               'บันทึกข้อมูลไซต์งาน',
                               style: TextStyle(fontSize: 18),
-                            ))),
-                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                            ))), //อันนี้คือให้มันเว้นช่อง
+                    const SizedBox(height: 30),
                     SizedBox(
                         width: 200,
                         height: 50,
@@ -118,8 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: const Text(
                               'บันทึกชื่อผู้ใช้งาน',
                               style: TextStyle(fontSize: 18),
-                            ))),
-                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                            ))), //อันนี้คือให้มันเว้นช่อง
+                    const SizedBox(height: 30),
                     SizedBox(
                         width: 200,
                         height: 50,
@@ -135,8 +119,25 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: const Text(
                               'บันทึกข้อมูลหัววัดรังสี',
                               style: TextStyle(fontSize: 18),
-                            ))),
-                    const SizedBox(height: 30), //อันนี้คือให้มันเว้นช่อง
+                            ))), //อันนี้คือให้มันเว้นช่อง
+                    const SizedBox(height: 30),
+                    SizedBox(
+                        width: 200,
+                        height: 50,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const newuserpage(), //เปลี่ยนหน้autoตรงนนี้จ้า
+                                  ));
+                            },
+                            child: const Text(
+                              'เริ่มต้นวัดรังสี',
+                              style: TextStyle(fontSize: 18),
+                            ))), //อันนี้คือให้มันเว้นช่อง
+                    const SizedBox(height: 30),
                     SizedBox(
                         width: 200,
                         height: 50,

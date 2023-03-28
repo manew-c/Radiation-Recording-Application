@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Pages/informationPage.dart';
-import '../map.dart';
 import 'package:flutter_application_1/Pages/map2.dart';
 import 'package:flutter_application_1/Pages/allvariable.dart';
 
@@ -103,6 +101,7 @@ class _newuserpageState extends State<newuserpage> {
                         },
                       )),
                     ),
+                    const SizedBox(width: 10),
                     FutureBuilder(
                       future: fetchDataworksite(),
                       builder: (context, snapshot) {

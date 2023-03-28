@@ -66,7 +66,7 @@ class _saveuserPageState extends State<saveuserPage> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: Text(
-                                      'บันทึกชื่อผู้ใช้  ${saveusername}  เรียบร้อย'),
+                                      'บันทึกชื่อผู้ใช้  $saveusername  เรียบร้อย'),
                                   duration: const Duration(seconds: 5),
                                 ));
 

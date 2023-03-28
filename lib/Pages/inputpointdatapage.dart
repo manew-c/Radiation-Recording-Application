@@ -77,7 +77,7 @@ class _inputpointPageState extends State<inputpointpage> {
       debugPrint(maxNumber.toString());
       return maxNumber;
     } else {
-      debugPrint('ไม่เจอเซ็ตเซ็ตว่าง');
+      debugPrint('ไม่เจอเซ็ต เซ็ตว่าง');
       return 0; //Stream.value(0);
     }
   }
@@ -450,8 +450,19 @@ class _inputpointPageState extends State<inputpointpage> {
                           duration: const Duration(seconds: 5),
                         ));
                       } //นี้คือจบifอันใหญ่สุด
-                    },
+                      debugPrint('ละติจูดที่บันทึก' + userloca.lat.toString());
+                      debugPrint(
+                          'ลองจิจูดที่บันทึก' + userloca.long.toString());
+                      debugPrint(
+                          'unit5cm ที่เลือกจะเปลี่ยนไหม $_selectedunit5cm');
+                    }, //อันนี้ในonpress
                     child: const Center(child: Text("Submit")),
+                  ),
+                  const Text(
+                    'หลังกดsubmitกรุณารอแจ้งเตือนบันทึกสำเร็จแล้วจึงกดกลับได้',
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
                   ),
                   Row(
                     children: [
@@ -470,12 +481,14 @@ class _inputpointPageState extends State<inputpointpage> {
                       const SizedBox(width: 20),
                       ElevatedButton(
                         onPressed: () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const MyHomePage(), //เปลี่ยนหน้autoตรงนนี้จ้า
-                              ));
+                          //pushReplacement .pushAndRemoveUntil popUntil
+
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyHomePage()),
+                            ModalRoute.withName('/'),
+                          );
                         },
                         child: const Text('ไปหน้าแรก'),
                       ),

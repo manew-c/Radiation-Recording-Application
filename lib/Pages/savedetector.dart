@@ -51,7 +51,7 @@ class _savedetectorPageState extends State<savedetectorPage> {
                         if (value1!.isEmpty) {
                           return 'Please enter your หัววัด';
                         } else if (_setdetector.contains(value1) == true) {
-                          debugPrint('มีหัววัดนี้แล้ว' + value1);
+                          debugPrint('มีหัววัดนี้แล้ว$value1');
                           return 'มีหัววัดนี้แล้ว';
                         }
                         return null;

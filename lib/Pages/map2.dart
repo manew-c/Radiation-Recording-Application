@@ -3,9 +3,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; //ใช้แปะtimestamp
 import 'package:flutter_application_1/Pages/allvariable.dart';
-//อัพรูปภาพ
-//ใช้ fileได้
 import 'package:flutter_application_1/Pages/inputpointdatapage.dart';
+import 'dart:math';
+import 'package:vector_math/vector_math.dart' hide Colors;
+import 'dart:async';
 
 class Maps2Page extends StatefulWidget {
   const Maps2Page({super.key});
@@ -16,8 +17,6 @@ class Maps2Page extends StatefulWidget {
 class _Maps2PageState extends State<Maps2Page> {
   late Position userlocation;
   late GoogleMapController mapController;
-// State variable to store the picked file
-// State variable to store the file name
 
   DocumentReference<Map<String, dynamic>> detectordatabase = FirebaseFirestore
       .instance
@@ -60,8 +59,23 @@ class _Maps2PageState extends State<Maps2Page> {
     return userlocation;
   }
 
-  Future<void> _updatelocation() async {
+  Future<Position> _updatelocation() async {
     userlocation = await Geolocator.getCurrentPosition();
+    return userlocation;
+  }
+
+  Stream<double> distance(double lat1, double lat2, double lon1, double lon2) {
+    lon1 = radians(lon1);
+    lon2 = radians(lon2);
+    lat1 = radians(lat1);
+    lat2 = radians(lat2);
+    double dlon = lon2 - lon1;
+    double dlat = lat2 - lat1;
+    double a =
+        pow(sin(dlat / 2), 2) + cos(lat1) * cos(lat2) * pow(sin(dlon / 2), 2);
+    double c = 2 * asin(sqrt(a));
+    double r = 6371; //Radius of earth in kilometers. Use 3956 for miles
+    return Stream.value(c * r * 100);
   }
 
   @override
@@ -116,11 +130,8 @@ class _Maps2PageState extends State<Maps2Page> {
 
               userloca.lat = userlocation.latitude;
               userloca.long = userlocation.longitude;
-              debugPrint('lat =' + userlocation.latitude.toString());
-              /*ScaffoldMessenger.of((context)).showSnackBar(SnackBar(
-                content: Text('lat =' + userlocation.latitude.toString()),
-                duration: const Duration(seconds: 5),
-              ));*/
+              debugPrint('lat =${userlocation.latitude}');
+
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -131,6 +142,41 @@ class _Maps2PageState extends State<Maps2Page> {
             label: const Text("บันทึกค่าdose"),
             icon: const Icon(Icons.near_me),
           ),
+          const SizedBox(width: 10),
+          /*FutureBuilder(
+              future: _updatelocation(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  userlocation = snapshot.data!;
+                  return StreamBuilder<double>(
+                    stream: distance(
+                      userloca.lat.toDouble(),
+                      userlocation.latitude,
+                      userloca.long.toDouble(),
+                      userlocation.longitude,
+                    ),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final distanceInKm = snapshot.toString();
+                        return Container(
+                          width: 100,
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Text(
+                            'Distance: ${distanceInKm} km', //${distanceInKm.toStringAsFixed(3)}
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        );
+                      }
+                    },
+                  );
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }),*/
         ],
       ),
     );
