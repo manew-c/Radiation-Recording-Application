@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Pages/map2.dart';
 import 'package:flutter_application_1/Pages/allvariable.dart';
+import 'package:geolocator/geolocator.dart';
 
 class newuserpage extends StatefulWidget {
   const newuserpage({Key? key}) : super(key: key);
@@ -313,6 +314,7 @@ class _newuserpageState extends State<newuserpage> {
                       start.selectedworksite = _selectedworksite!;
                       start.selectedusername = _selectedusername!;
                       start.selecteddetector = _selecteddetector!;
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -324,7 +326,7 @@ class _newuserpageState extends State<newuserpage> {
                       // show an error message
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                            'โปรดเลือกไซต์งาน$_selectedworksite ชื่อ$_selectedusername, หัววัด$_selecteddetector '),
+                            'โปรดเลือกไซต์งาน ชื่อผู้วัดและหัววัดให้ครบทั้งสามอัน'),
                         duration: const Duration(seconds: 2),
                       ));
                     }

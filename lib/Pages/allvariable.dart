@@ -63,8 +63,8 @@ class _userlocationclass {
 }
 
 _userlocationclass userloca = _userlocationclass(
-  lat: 0,
-  long: 0,
+  lat: 0.0,
+  long: 0.0,
 );
 
 class MyData {
@@ -90,4 +90,18 @@ class COUTERS {
   void incrementCounter() {
     _counter++;
   }
+}
+
+class latlongsave {
+  static final latlongsave _instance = latlongsave._(); // private constructor
+  factory latlongsave() => _instance;
+  latlongsave._(); // private constructor
+
+  dynamic _longsave = null;
+  get longsave => _longsave;
+  set longsave(value) => _longsave = value;
+
+  dynamic _latsave = null;
+  get latsave => _latsave;
+  set latsave(value) => _latsave = value;
 }

@@ -404,9 +404,8 @@ class _inputpointPageState extends State<inputpointpage> {
                             debugPrint('ส่งรูปแล้ว');
                           } catch (e) {
                             debugPrint('ส่งรูปไม่ได้');
-                            debugPrint(_pickedImage!.path);
                           }
-                        } //ifอันเล็ก
+                        } //<-จบifอันเล็ก
                         //ข้างล่างไม่มีรูป
                         else if (_pickedImage?.path == null) {
                           siteandprovind
@@ -430,10 +429,12 @@ class _inputpointPageState extends State<inputpointpage> {
                             'time': Timestamp.now(),
                             'picpath': 'ไม่ได้ถ่ายรูป',
                           });
-                        } //จบ if อันที่2 ข้างล่างคือifใหญ่
+                        } //<-จบ if อันที่2 ข้างล่างคือifใหญ่
                         updateoldpoint(MAP.pointname); //แสดงชื่อจุดที่เคยกรอก
                         debugPrint(
                             'ชื่อจุด' + MyData().listoldpoint.toString());
+                        latlongsave().latsave = userloca.lat;
+                        latlongsave().longsave = userloca.long;
 
                         _formKey.currentState!.reset();
 
